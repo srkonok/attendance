@@ -17,7 +17,7 @@ body {
     margin: 0;
 }
 
-/* Header Styling - Positioned at top */
+/* Header Styling */
 .header-container {
     background: #28a745;
     color: white;
@@ -43,7 +43,7 @@ body {
     color: #d4edda;
 }
 
-/* Attendance Form Styling */
+/* Container */
 .container {
     background: #fff;
     padding: 30px;
@@ -61,6 +61,7 @@ body {
     color: #333;
 }
 
+/* Form Styling */
 .form-group {
     margin-bottom: 20px;
 }
@@ -74,6 +75,7 @@ body {
     margin-top: 5px;
 }
 
+/* Button Styling */
 button {
     background-color: #28a745;
     color: #fff;
@@ -83,13 +85,15 @@ button {
     border-radius: 5px;
     cursor: pointer;
     width: 100%;
-    margin-top: 20px;
+    /* margin-top: 20px; */
+    transition: background-color 0.3s ease;
 }
 
 button:hover {
     background-color: #218838;
 }
 
+/* Messages */
 .message {
     margin-top: 20px;
     padding: 15px;
@@ -110,62 +114,7 @@ button:hover {
     border: 1px solid #f5c6cb;
 }
 
-/* Mobile Responsiveness */
-@media (max-width: 768px) {
-    .header-container {
-        padding: 15px;
-    }
-
-    .header-container h1 {
-        font-size: 1.3em;
-    }
-
-    .header-container p {
-        font-size: 0.9em;
-    }
-
-    .container {
-        max-width: 90%;
-        padding: 20px;
-        margin-top: 120px;
-    }
-
-    .container h1 {
-        font-size: 1.5em;
-    }
-
-    .form-group input,
-    button {
-        font-size: 1em;
-        padding: 14px;
-    }
-}
-
-@media (max-width: 480px) {
-    .header-container h1 {
-        font-size: 1.1em;
-    }
-
-    .header-container p {
-        font-size: 0.85em;
-    }
-
-    .container h1 {
-        font-size: 1.3em;
-    }
-
-    .form-group input,
-    button {
-        font-size: 0.95em;
-        padding: 12px;
-    }
-
-    button {
-        padding: 15px;
-    }
-}
-
-/* Style for attendance list */
+/* Attendance List */
 .attendance-list {
     margin-top: 30px;
     padding: 15px;
@@ -207,66 +156,53 @@ button:hover {
     background-color: #f9f9f9;
 }
 
-/* Styling for the search bar and button side by side */
+/* Search Bar and Button Styling */
 .search-container {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 600px; 
+    justify-content: center;
+    gap: 10px;
     margin-bottom: 20px;
+    width: 100%;
 }
 
 .search-container input {
     flex: 1;
     padding: 12px;
     font-size: 1em;
-    border-radius: 5px;
     border: 1px solid #ddd;
-    margin-right: 10px; 
+    border-radius: 5px;
+    transition: border-color 0.3s ease-in-out;
+}
+
+.search-container input:focus {
+    border-color: #28a745;
+    outline: none;
 }
 
 .search-container button {
+    padding: 12px 20px;
+    font-size: 1em;
     background-color: #28a745;
     color: white;
-    padding: 12px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 1em;
-    margin-bottom: 20px;
-    width: auto; 
-    transition: background-color 0.3s ease; 
+    transition: background-color 0.3s ease;
 }
 
 .search-container button:hover {
     background-color: #218838;
 }
 
-.pagination {
-    text-align: center;
-    margin-top: 20px;
-}
-
-.pagination-link {
-    display: inline-block;
-    padding: 10px 20px;
-    margin: 0 5px;
-    background-color: #28a745;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-}
-
-.pagination-link:hover {
-    background-color: #218838;
-}
+/* Pagination */
 .pagination {
     display: flex;
     align-items: center;
     justify-content: center;
     margin-top: 20px;
     padding: 10px;
+    gap: 10px;
 }
 
 .page-number p {
@@ -287,11 +223,92 @@ button:hover {
 }
 
 .pagination-link:hover {
-    background-color: #218838;
+    background-color: #1e7e34;
 }
 
 .pagination-link:disabled {
     background-color: #ddd;
     color: #777;
     cursor: not-allowed;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .header-container {
+        padding: 15px;
+    }
+
+    .header-container h1 {
+        font-size: 1.3em;
+    }
+
+    .header-container p {
+        font-size: 0.9em;
+    }
+
+    .container {
+        max-width: 90%;
+        padding: 20px;
+        margin-top: 120px;
+    }
+
+    .container h1 {
+        font-size: 1.5em;
+    }
+
+    .form-group input,
+    button {
+        font-size: 1em;
+        padding: 14px;
+    }
+
+    .search-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .search-container input {
+        margin-bottom: 10px;
+    }
+
+    .search-container button {
+        width: 100%;
+    }
+
+    .pagination {
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .pagination-link {
+        padding: 10px 12px;
+    }
+
+    .page-number p {
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-container h1 {
+        font-size: 1.1em;
+    }
+
+    .header-container p {
+        font-size: 0.85em;
+    }
+
+    .container h1 {
+        font-size: 1.3em;
+    }
+
+    .form-group input,
+    button {
+        font-size: 0.95em;
+        padding: 12px;
+    }
+
+    button {
+        padding: 15px;
+    }
 }

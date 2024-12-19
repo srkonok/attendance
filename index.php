@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Default to today's date if no search date is provided
-if (empty($searchDate)) {
+if (!$searchStudentId and empty($searchDate)) {
     $searchDate = date('Y-m-d');
 }
 
