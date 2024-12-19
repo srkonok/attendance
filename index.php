@@ -12,6 +12,7 @@ $message = "";
 $alertClass = "";
 $formVisible = true;
 $searchStudentId = ""; // Variable to hold searched student ID
+$searchDate = ""; // Variable to hold searched date
 $limit = 10; // Number of records per page
 
 // Get current page number, default to 1 if not set
@@ -53,32 +54,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $message = "Error: " . $e->getMessage();
             $alertClass = "error";
         }
+    } elseif (isset($_POST['search_attendance'])) {
+        $searchStudentId = $_POST['search_student_id'];
+        $searchDate = $_POST['search_date'];
     }
 }
 
+// Default to today's date if no search date is provided
+if (empty($searchDate)) {
+    $searchDate = date('Y-m-d');
+}
+
 // Fetch total attendance records for pagination
-$totalQuery = "SELECT COUNT(*) FROM attendance WHERE date = :date";
-$params = ['date' => date('Y-m-d')];
+$totalQuery = "SELECT COUNT(*) FROM attendance WHERE 1=1";
+$params = [];
+
+if (!empty($searchStudentId)) {
+    $totalQuery .= " AND student_id = :student_id";
+    $params['student_id'] = $searchStudentId;
+}
+
+if (!empty($searchDate)) {
+    $totalQuery .= " AND date = :date";
+    $params['date'] = $searchDate;
+}
 
 $totalStmt = $conn->prepare($totalQuery);
 $totalStmt->execute($params);
 $totalRecords = $totalStmt->fetchColumn();
 $totalPages = ceil($totalRecords / $limit);
 
-// Fetch today's attendance records with student names
+// Fetch filtered attendance records
 $query = "
     SELECT a.student_id, a.date, s.name
     FROM attendance a
     JOIN students s ON a.student_id = s.student_id
-    WHERE a.date = :date
-    LIMIT " . (int)$limit . " OFFSET " . (int)$offset;
-$params['date'] = date('Y-m-d'); // Make sure to bind the date parameter
+    WHERE 1=1
+";
+
+if (!empty($searchStudentId)) {
+    $query .= " AND a.student_id = :student_id";
+    $params['student_id'] = $searchStudentId;
+}
+
+if (!empty($searchDate)) {
+    $query .= " AND a.date = :date";
+    $params['date'] = $searchDate;
+}
+
+$query .= " LIMIT " . (int)$limit . " OFFSET " . (int)$offset;
 
 $stmt = $conn->prepare($query);
 $stmt->execute($params);
 $attendees = $stmt->fetchAll();
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -86,38 +115,13 @@ $attendees = $stmt->fetchAll();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cloud Computing Attendance</title>
     <link rel="stylesheet" href="style.css">
-    <script>
-        // JavaScript function to filter the attendance list based on student ID
-        function filterAttendance() {
-            var input, filter, table, tr, td, i, txtValue;
-            input = document.getElementById("search_student_id");
-            filter = input.value.toUpperCase();
-            table = document.getElementById("attendance_table");
-            tr = table.getElementsByTagName("tr");
-
-            for (i = 0; i < tr.length; i++) {
-                td = tr[i].getElementsByTagName("td")[1]; // Column 1 is Student ID
-                if (td) {
-                    txtValue = td.textContent || td.innerText;
-                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                        tr[i].style.display = "";
-                    } else {
-                        tr[i].style.display = "none";
-                    }
-                }
-            }
-        }
-    </script>
+    <script src="attendance.js" defer></script>
 </head>
 <body>
-
-    <!-- Cloud Computing Header -->
     <div class="header-container">
         <h1>CSE 4267: Cloud Computing</h1>
         <p><?php echo date('l, F j, Y'); ?></p>
     </div>
-
-    <!-- Attendance Form -->
     <div class="container">
         <h2>Submit Attendance</h2>
         <?php if (!empty($message)): ?>
@@ -125,7 +129,6 @@ $attendees = $stmt->fetchAll();
                 <?=$message;?>
             </div>
         <?php endif;?>
-
         <?php if ($formVisible): ?>
             <form method="post" action="">
                 <div class="form-group">
@@ -135,17 +138,15 @@ $attendees = $stmt->fetchAll();
             </form>
         <?php endif;?>
     </div>
-
-    <!-- Today's Attendance List -->
     <div class="attendance-list">
         <h2>Today's Attendance</h2>
-
-        <!-- Search Form -->
-        <div class="search-container">
-            <input type="text" id="search_student_id" placeholder="Search by Student ID">
-            <button type="button" onclick="filterAttendance()">Search</button>
-        </div>
-
+        <form method="post" action="">
+            <div class="search-container">
+                <input type="text" id="search_student_id" name="search_student_id" value="<?= htmlspecialchars($searchStudentId); ?>" placeholder="Search by Student ID">
+                <input type="date" id="search_date" name="search_date" value="<?= htmlspecialchars($searchDate); ?>" placeholder="Search by Date">
+                <button type="submit" name="search_attendance">Search</button>
+            </div>
+        </form>
         <table class="attendance-table" id="attendance_table">
             <thead>
                 <tr>
@@ -173,20 +174,13 @@ $attendees = $stmt->fetchAll();
                 <?php endif;?>
             </tbody>
         </table>
-
-        <!-- Pagination Links -->
         <div class="pagination">
-            <div class="page-number">
-                <p>Page <?= $page ?> of <?= $totalPages ?></p>
-            </div>
-            <!-- Previous Page Link -->
+            <p>Page <?= $page ?> of <?= $totalPages ?></p>
             <?php if ($page > 1): ?>
-                <a href="?page=<?= ($page - 1); ?>" class="pagination-link">Previous</a>
+                <a href="?page=<?= ($page - 1); ?>">Previous</a>
             <?php endif; ?>
-
-            <!-- Next Page Link -->
             <?php if ($page < $totalPages): ?>
-                <a href="?page=<?= ($page + 1); ?>" class="pagination-link">Next</a>
+                <a href="?page=<?= ($page + 1); ?>">Next</a>
             <?php endif; ?>
         </div>
     </div>
