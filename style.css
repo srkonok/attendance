@@ -216,20 +216,27 @@ button:hover {
     text-decoration: none;
     padding: 8px 15px;
     margin: 0 5px;
-    background-color: #218838;
+    background-color: #28a745; /* Beautiful green color */
     color: white;
     border-radius: 5px;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
-.pagination-link:hover {
-    background-color: #1e7e34;
-}
+/* .pagination-link:hover {
+    background-color: #218838;
+    transform: scale(1.1); 
+} */
 
 .pagination-link:disabled {
     background-color: #ddd;
     color: #777;
     cursor: not-allowed;
+}
+
+/* Active page button */
+.pagination-link.active {
+    background-color: #218838; /* Same dark green for the active page */
+    font-weight: bold;
 }
 
 /* Mobile Responsiveness */

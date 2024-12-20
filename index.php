@@ -178,14 +178,17 @@ $attendees = $stmt->fetchAll();
             </tbody>
         </table>
         <div class="pagination">
-            <p>Page <?= $page ?> of <?= $totalPages ?></p>
+            <p class="page-number">Page <?= $page ?> of <?= $totalPages ?></p>
+
             <?php if ($page > 1): ?>
-                <a href="?page=<?= ($page - 1); ?>&search_date=<?= urlencode($searchDate); ?>&search_student_id=<?= urlencode($searchStudentId); ?>">Previous</a>
+                <a href="?page=<?= ($page - 1); ?>&search_date=<?= urlencode($searchDate); ?>&search_student_id=<?= urlencode($searchStudentId); ?>" class="pagination-link">Previous</a>
             <?php endif; ?>
+
             <?php if ($page < $totalPages): ?>
-                <a href="?page=<?= ($page + 1); ?>&search_date=<?= urlencode($searchDate); ?>&search_student_id=<?= urlencode($searchStudentId); ?>">Next</a>
+                <a href="?page=<?= ($page + 1); ?>&search_date=<?= urlencode($searchDate); ?>&search_student_id=<?= urlencode($searchStudentId); ?>" class="pagination-link">Next</a>
             <?php endif; ?>
         </div>
+
 
     </div>
 </body>
