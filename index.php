@@ -11,12 +11,12 @@ function getUserIP()
 $message = "";
 $alertClass = "";
 $formVisible = true;
-$searchStudentId = ""; // Variable to hold searched student ID
-$searchDate = ""; // Variable to hold searched date
+$searchStudentId = isset($_GET['search_student_id']) ? $_GET['search_student_id'] : ""; // Variable to hold searched student ID
+$searchDate =isset($_GET['search_date']) ? $_GET['search_date'] :  ""; // Variable to hold searched date
 $limit = 10; // Number of records per page
 
 // Get current page number, default to 1 if not set
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+$page = isset($_GET['page']) ? $_GET['page'] : 1;
 $offset = ($page - 1) * $limit;
 
 // Handle form submission for attendance
@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Default to today's date if no search date is provided
-if (!$searchStudentId and empty($searchDate)) {
+if (!$searchStudentId and empty($searchDate) and !$page) {
     $searchDate = date('Y-m-d');
 }
 
@@ -92,21 +92,24 @@ $query = "
     WHERE 1=1
 ";
 
+// Add search conditions dynamically
+$params = [];
 if (!empty($searchStudentId)) {
     $query .= " AND a.student_id = :student_id";
     $params['student_id'] = $searchStudentId;
 }
-
 if (!empty($searchDate)) {
     $query .= " AND a.date = :date";
     $params['date'] = $searchDate;
 }
 
-$query .= " LIMIT " . (int)$limit . " OFFSET " . (int)$offset;
+// Add ordering and pagination
+$query .= " ORDER BY a.date DESC LIMIT " . (int)$limit . " OFFSET " . (int)$offset;
 
 $stmt = $conn->prepare($query);
 $stmt->execute($params);
 $attendees = $stmt->fetchAll();
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -177,12 +180,13 @@ $attendees = $stmt->fetchAll();
         <div class="pagination">
             <p>Page <?= $page ?> of <?= $totalPages ?></p>
             <?php if ($page > 1): ?>
-                <a href="?page=<?= ($page - 1); ?>">Previous</a>
+                <a href="?page=<?= ($page - 1); ?>&search_date=<?= urlencode($searchDate); ?>&search_student_id=<?= urlencode($searchStudentId); ?>">Previous</a>
             <?php endif; ?>
             <?php if ($page < $totalPages): ?>
-                <a href="?page=<?= ($page + 1); ?>">Next</a>
+                <a href="?page=<?= ($page + 1); ?>&search_date=<?= urlencode($searchDate); ?>&search_student_id=<?= urlencode($searchStudentId); ?>">Next</a>
             <?php endif; ?>
         </div>
+
     </div>
 </body>
 </html>
