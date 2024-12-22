@@ -160,6 +160,7 @@ $attendees = $stmt->fetchAll();
                     <th>Date</th>
                 </tr>
             </thead>
+            
             <tbody>
                 <?php if (empty($attendees)): ?>
                     <tr>
