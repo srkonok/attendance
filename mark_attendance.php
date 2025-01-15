@@ -93,12 +93,12 @@ $todayAttendance = $attendanceStmt->fetchAll(PDO::FETCH_ASSOC);
                     <thead>
                         <tr>
                             <th>S.No</th>
-                            <th>Select</th>
                             <th>Student ID</th>
                             <th>Name</th>
                             <th>
                                 <a href="?sort=section&order=<?= $newSortOrder ?>&search=<?= htmlspecialchars($searchQuery) ?>" style="color: white; text-decoration: none;">Section</a>
                             </th>
+                            <th>Select</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -109,10 +109,10 @@ $todayAttendance = $attendanceStmt->fetchAll(PDO::FETCH_ASSOC);
                             <?php foreach ($students as $student): ?>
                                 <tr>
                                     <td><?= $serial++ ?></td>
-                                    <td><input type="checkbox" name="student_ids[]" value="<?= $student['student_id'] ?>"></td>
                                     <td><?= htmlspecialchars($student['student_id']) ?></td>
                                     <td><?= htmlspecialchars($student['name']) ?></td>
                                     <td><?= htmlspecialchars($student['section']) ?></td>
+                                    <td><input type="checkbox" name="student_ids[]" value="<?= $student['student_id'] ?>"></td>
                                 </tr>
                             <?php endforeach; ?>
                         <?php endif; ?>
