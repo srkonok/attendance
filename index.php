@@ -123,9 +123,13 @@ $attendees = $stmt->fetchAll();
 </head>
 <body>
     <div class="header-container">
-        <h1>CSE 4267: Cloud Computing</h1>
-        <p><?php echo date('l, F j, Y'); ?></p>
+        <div class="header-content">
+            <h1>CSE 4267: Cloud Computing</h1>
+            <p><?php echo date('l, F j, Y'); ?></p>
+        </div>
+        <!-- <button onclick="location.href='#studentListSection'" class="redirect-btn">View All Students</button> -->
     </div>
+
     <div class="container">
         <h2>Submit Attendance</h2>
         <?php if (!empty($message)): ?>
@@ -191,6 +195,12 @@ $attendees = $stmt->fetchAll();
             <?php endif; ?>
         </div>
 
+        <div class="button-container">
+            <a href="http://localhost/attendance/student-list.php" class="button">All Student List</a>
+        </div>
+        <div class="button-container">
+            <a href="http://localhost/attendance/manual_attendance.php" class="button">Manual Attendance</a>
+        </div>
 
     </div>
 </body>

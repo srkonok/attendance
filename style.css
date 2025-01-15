@@ -319,3 +319,460 @@ button:hover {
         padding: 15px;
     }
 }
+/* Students List Container */
+.students-list {
+    margin: 20px auto;
+    padding: 20px;
+    max-width: 900px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Title */
+.students-list h2 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+/* Table Styling */
+.students-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.students-table th,
+.students-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.students-table thead th {
+    background-color: #28a745;
+    color: white;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+.students-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.students-table tbody tr:hover {
+    background-color: #e6f7e9;
+}
+
+.students-table tbody td {
+    font-size: 14px;
+    color: #555;
+}
+
+/* No Data Message */
+.no-data {
+    text-align: center;
+    font-size: 14px;
+    color: #888;
+    font-style: italic;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .students-list {
+        padding: 15px;
+    }
+
+    .students-table th,
+    .students-table td {
+        padding: 10px;
+    }
+
+    .students-table {
+        font-size: 13px;
+    }
+}
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+    gap: 12px;
+}
+
+.pagination a {
+    text-decoration: none;
+    padding: 8px 14px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: #333;
+    font-weight: 500;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.pagination a:hover {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.pagination a.active {
+    background-color: #28a745;
+    color: #fff;
+    border-color: #28a745;
+    font-weight: bold;
+}
+
+.pagination a.disabled {
+    pointer-events: none;
+    background-color: #e0e0e0;
+    color: #999;
+    border-color: #e0e0e0;
+}
+
+.pagination a.prev,
+.pagination a.next {
+    font-weight: bold;
+}
+
+.pagination a.prev.disabled,
+.pagination a.next.disabled {
+    cursor: not-allowed;
+}
+
+.pagination a.prev, 
+.pagination a.next {
+    padding: 8px 12px;
+}
+
+.search-form {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.search-form input {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+    width: 1900px;
+}
+
+.search-form button {
+    padding: 8px 15px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.search-form button:hover {
+    background-color: #000;
+}
+
+.students-table a {
+    text-decoration: none;
+    color: #000;
+    transition: color 0.3s ease;
+}
+
+.students-table a:hover {
+    color: #28a745;
+    text-decoration: underline;
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .students-table {
+        display: block; /* Ensures the table can scroll horizontally */
+        overflow-x: auto;
+        white-space: nowrap; /* Prevent text from wrapping */
+    }
+
+    .students-table th,
+    .students-table td {
+        padding: 10px;
+        font-size: 12px;
+    }
+
+    /* Make sure headers and columns are readable on small screens */
+    .students-table thead th {
+        font-size: 12px;
+    }
+
+    .students-table tbody td {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .students-table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .students-table th,
+    .students-table td {
+        padding: 8px;
+        font-size: 12px;
+    }
+
+    .students-table thead th {
+        font-size: 12px;
+    }
+
+    .students-table tbody td {
+        font-size: 12px;
+    }
+
+    .search-form input {
+        font-size: 14px;
+        width: 100%;
+    }
+
+    .search-form button {
+        font-size: 14px;
+        width: 100%;
+        padding: 10px;
+    }
+}
+.sortable {
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center; /* Align arrow with text */
+    gap: 5px; /* Space between "Section" and arrow */
+}
+
+.section-title {
+    color: white;
+    font-weight: bold;
+}
+
+.arrow {
+    font-size: 14px;
+    color: white;
+}
+
+.sortable:hover .section-title,
+.sortable:hover .arrow {
+    text-decoration: underline;
+}
+/* Table Styling */
+.students-table th,
+.students-table td {
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.students-table thead th {
+    background-color: #28a745;
+    color: white;
+    text-transform: uppercase;
+    font-size: 14px;
+}
+
+.students-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.students-table tbody tr:hover {
+    background-color: #e6f7e9;
+}
+
+.students-table tbody td {
+    font-size: 14px;
+    color: #555;
+}
+
+/* No Data Message */
+.no-data {
+    text-align: center;
+    font-size: 14px;
+    color: #888;
+    font-style: italic;
+}
+
+/* Search Form Styling */
+.search-form {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.search-form input {
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    width: 800px; /* Adjust width to make it appropriate */
+}
+
+.search-form button {
+    /* padding: 8px 15px; */
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.search-form button:hover {
+    background-color: #28a745;
+}
+
+/* Pagination Styling */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0;
+    gap: 12px;
+}
+
+.pagination a {
+    text-decoration: none;
+    padding: 8px 14px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: #333;
+    font-weight: 500;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.pagination a:hover {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.pagination a.active {
+    background-color: #28a745;
+    color: #fff;
+    border-color: #28a745;
+    font-weight: bold;
+}
+
+.pagination a.disabled {
+    pointer-events: none;
+    background-color: #e0e0e0;
+    color: #999;
+    border-color: #e0e0e0;
+}
+
+.pagination a.prev,
+.pagination a.next {
+    font-weight: bold;
+}
+
+.pagination a.prev.disabled,
+.pagination a.next.disabled {
+    cursor: not-allowed;
+}
+
+/* Sortable Column Styling */
+.sortable {
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.section-title {
+    color: white;
+    font-weight: bold;
+}
+
+.arrow {
+    font-size: 14px;
+    color: white;
+}
+
+.sortable:hover .section-title,
+.sortable:hover .arrow {
+    text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .students-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    .students-table th,
+    .students-table td {
+        padding: 10px;
+        font-size: 12px;
+    }
+
+    .students-table thead th {
+        font-size: 12px;
+    }
+
+    .students-table tbody td {
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .students-table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .students-table th,
+    .students-table td {
+        padding: 8px;
+        font-size: 12px;
+    }
+
+    .students-table thead th {
+        font-size: 12px;
+    }
+
+    .students-table tbody td {
+        font-size: 12px;
+    }
+
+    .search-form input {
+        font-size: 14px;
+        width: 100%;
+    }
+
+    .search-form button {
+        font-size: 14px;
+        width: 100%;
+        padding: 10px;
+    }
+}
+.button-container {
+    display: flex;
+    justify-content: flex-end; /* Aligns the button to the right */
+    margin-top: 10px; /* Adjust spacing as needed */
+}
+
+.button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    background-color: #218838;
+}
