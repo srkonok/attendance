@@ -195,16 +195,13 @@ $attendees = $stmt->fetchAll();
             <?php endif; ?>
         </div>
 
-        <?php
-$mac_ip = $_SERVER['SERVER_ADDR']; // Fallback if not detected
-?>
+        <div class="button-container">
+            <a href="/attendance/student-list.php" class="button">All Student List</a>
+        </div>
+        <div class="button-container">
+            <a href="/attendance/manual_attendance.php" class="button">Manual Attendance</a>
+        </div>
 
-<div class="button-container">
-    <a href="http://<?= $mac_ip ?>/attendance/student-list.php" class="button">All Student List</a>
-</div>
-<div class="button-container">
-    <a href="http://<?= $mac_ip ?>/attendance/manual_attendance.php" class="button">Manual Attendance</a>
-</div>
     </div>
 </body>
 </html>
