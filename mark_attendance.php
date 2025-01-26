@@ -8,6 +8,7 @@ if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
     exit();
 }
 
+
 // Get search and sorting query
 $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
 $sortColumn = isset($_GET['sort']) && in_array($_GET['sort'], ['section']) ? $_GET['sort'] : 'student_id';
