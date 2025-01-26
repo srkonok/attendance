@@ -18,12 +18,21 @@ $newSortOrder = ($sortOrder === 'asc') ? 'desc' : 'asc';
 $today = date("Y-m-d");
 
 // Fetch students who have **not** marked attendance today
+$condition = "s.name LIKE :search OR s.student_id LIKE :search"; // Default condition
+
+// Modify the condition if the search query is 'A' or 'B'
+if ($searchQuery == 'A' || $searchQuery == 'B') {
+    $condition = "s.section LIKE :search";
+}
+
+// Build the query
 $query = "SELECT s.student_id, s.name, s.section 
           FROM students s
           LEFT JOIN attendance a ON s.student_id = a.student_id AND a.date = :today
-          WHERE (s.name LIKE :search OR s.student_id LIKE :search OR s.section LIKE :search)
+          WHERE ($condition)
           AND a.student_id IS NULL
           ORDER BY $sortColumn $sortOrder";
+
 $stmt = $conn->prepare($query);
 $stmt->bindValue(':search', '%' . $searchQuery . '%', PDO::PARAM_STR);
 $stmt->bindValue(':today', $today, PDO::PARAM_STR);
