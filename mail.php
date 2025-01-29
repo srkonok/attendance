@@ -32,7 +32,9 @@ if (empty($absentStudents)) {
 // Create the PHPMailer instance
 $mail = new PHPMailer(true);
 
-// echo json_encode($absentStudents);
+// Tracking sent and failed emails
+$sentEmails = [];
+$failedEmails = [];
 
 try {
     // Configure SMTP settings from .env
@@ -45,43 +47,53 @@ try {
     $mail->Password   = $_ENV['MAIL_PASSWORD'];
     $mail->setFrom($_ENV['MAIL_FROM_ADDRESS'], $_ENV['MAIL_FROM_NAME']);
 
-    // foreach ($absentStudents as $student) {
-        // Recipient
-        $mail->addAddress('srkonok20@gmail.com', 'Shahriar');
+    // Loop through each absent student
+    foreach ($absentStudents as $student) {
+        try {
+            $mail->clearAddresses(); // Clear addresses before adding a new one
+            $mail->addAddress($student['email'], $student['name']);
 
-        // Email content
-        $mail->isHTML(true);
-        $mail->Subject = 'Class Attendance Reminder';
-        $mail->Body    = "
-        <div style='font-family: Arial, sans-serif; line-height: 1.6; color: #333;'>
-            <div style='background-color: #f4f4f4; padding: 20px; border-radius: 8px; border: 1px solid #ddd;'>
-                <h2 style='color:rgb(35, 36, 37); text-align: center;'>Cloud Computing Class Attendance</h2>
-                <p>Dear <strong>Shahriar</strong>,</p>
-                <p>
-                    We noticed that you did not attend the <strong>Cloud Computing</strong> class on
-                    <span style='color: #d9534f;'>{$date}</span>. Regular attendance is crucial to ensure you
-                    stay on track with the course content and activities.
-                </p>
-                <p>
-                    If you have any concerns or need assistance, please feel free to reach out to me directly.
-                    Your participation is vital for a successful learning experience.
-                </p>
-                <p style='margin-top: 20px;'>
-                    Best regards,<br>
-                    <strong>Shahriar Rahman</strong><br>
-                    Adjunct Faculty, CSE<br>
-                    Ahsanullah University of Science and Technology (AUST)
-                </p>
-            </div>
-        </div>
-    ";
+            // Email content
+            $mail->isHTML(true);
+            $mail->Subject = 'Class Attendance Reminder';
+            $mail->Body    = "
+            <div style='font-family: Arial, sans-serif; line-height: 1.6; color: #333;'>
+                <div style='background-color: #f4f4f4; padding: 20px; border-radius: 8px; border: 1px solid #ddd;'>
+                    <h2 style='color:rgb(35, 36, 37); text-align: center;'>Cloud Computing Class Attendance</h2>
+                    <p>Dear <strong>{$student['name']}</strong>,</p>
+                    <p>
+                        We noticed that you did not attend the <strong>Cloud Computing</strong> class on
+                        <span style='color: #d9534f;'>{$date}</span>. Regular attendance is crucial to ensure you
+                        stay on track with the course content and activities.
+                    </p>
+                    <p>
+                        If you have any concerns or need assistance, please feel free to reach out to me directly.
+                        Your participation is vital for a successful learning experience.
+                    </p>
+                    <p style='margin-top: 20px;'>
+                        Best regards,<br>
+                        <strong>Shahriar Rahman</strong><br>
+                        Adjunct Faculty, CSE<br>
+                        Ahsanullah University of Science and Technology (AUST)
+                    </p>
+                </div>
+            </div>";
 
-    //     // Send the email
-        $mail->send();
-    //     $mail->clearAddresses(); // Clear addresses for the next email
-    // }
+            // Send the email
+            $mail->send();
+            $sentEmails[] = "{$student['name']} ({$student['email']})";
+        } catch (Exception $e) {
+            $failedEmails[] = "{$student['name']} ({$student['email']}): {$mail->ErrorInfo}";
+        }
+    }
 
-    echo "Emails sent to all absent students.";
+    // Display results
+    echo "Emails Sent Successfully:\n";
+    echo !empty($sentEmails) ? implode("\n", $sentEmails) : "None";
+
+    echo "\n\nFailed to Send Emails:\n";
+    echo !empty($failedEmails) ? implode("\n", $failedEmails) : "None";
+
 } catch (Exception $e) {
-    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+    echo "Mailer configuration error: {$mail->ErrorInfo}";
 }
