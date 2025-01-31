@@ -87,6 +87,7 @@ try {
         }
     }
 
+    
     // Display results
     echo "Emails Sent Successfully:\n";
     echo !empty($sentEmails) ? implode("\n", $sentEmails) : "None";
