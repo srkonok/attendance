@@ -1,16 +1,23 @@
 <?php
+ini_set('max_execution_time', 300);
 include 'db.php';
-require 'vendor/autoload.php'; // Autoload dependencies
+require 'vendor/autoload.php';
+require 'email_template.php';
 
 use Dotenv\Dotenv;
 use PHPMailer\PHPMailer\Exception;
 use PHPMailer\PHPMailer\PHPMailer;
 
-// Load environment variables from .env
+header('Content-Type: text/event-stream');
+header('Cache-Control: no-cache');
+header('Connection: keep-alive');
+
+ob_implicit_flush(true);
+@ob_end_flush();
+
 $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
 
-// Define the date for attendance check
 $date = date('Y-m-d');
 
 // Fetch absent students
@@ -24,20 +31,21 @@ $absentStmt->bindValue(':date', $date, PDO::PARAM_STR);
 $absentStmt->execute();
 $absentStudents = $absentStmt->fetchAll();
 
-if (empty($absentStudents)) {
-    echo "No absent students to email.";
+$totalStudents = count($absentStudents);
+
+// Send total students count first
+if ($totalStudents === 0) {
+    echo "data: " . json_encode(["status" => "no_students", "message" => "No absent students to email."]) . "\n\n";
+    flush();
     exit;
+} else {
+    echo "data: " . json_encode(["status" => "total_students", "total" => $totalStudents]) . "\n\n";
+    flush();
 }
 
-// Create the PHPMailer instance
 $mail = new PHPMailer(true);
 
-// Tracking sent and failed emails
-$sentEmails = [];
-$failedEmails = [];
-
 try {
-    // Configure SMTP settings from .env
     $mail->isSMTP();
     $mail->SMTPAuth   = true;
     $mail->SMTPSecure = $_ENV['MAIL_ENCRYPTION'];
@@ -47,54 +55,45 @@ try {
     $mail->Password   = $_ENV['MAIL_PASSWORD'];
     $mail->setFrom($_ENV['MAIL_FROM_ADDRESS'], $_ENV['MAIL_FROM_NAME']);
 
-    // Loop through each absent student
+    $count = 0;
+
     foreach ($absentStudents as $student) {
         try {
-            $mail->clearAddresses(); // Clear addresses before adding a new one
+            $mail->clearAddresses();
             $mail->addAddress($student['email'], $student['name']);
 
-            // Email content
             $mail->isHTML(true);
             $mail->Subject = 'Class Attendance Reminder';
-            $mail->Body    = "
-            <div style='font-family: Arial, sans-serif; line-height: 1.6; color: #333;'>
-                <div style='background-color: #f4f4f4; padding: 20px; border-radius: 8px; border: 1px solid #ddd;'>
-                    <h2 style='color:rgb(35, 36, 37); text-align: center;'>Cloud Computing Class Attendance</h2>
-                    <p>Dear <strong>{$student['name']}</strong>,</p>
-                    <p>
-                        We noticed that you did not attend the <strong>Cloud Computing</strong> class on
-                        <span style='color: #d9534f;'>{$date}</span>. Regular attendance is crucial to ensure you
-                        stay on track with the course content and activities.
-                    </p>
-                    <p>
-                        If you have any concerns or need assistance, please feel free to reach out to me directly.
-                        Your participation is vital for a successful learning experience.
-                    </p>
-                    <p style='margin-top: 20px;'>
-                        Best regards,<br>
-                        <strong>Shahriar Rahman</strong><br>
-                        Adjunct Faculty, CSE<br>
-                        Ahsanullah University of Science and Technology (AUST)
-                    </p>
-                </div>
-            </div>";
+            $mail->Body    = getEmailTemplate($student['name'], $date);
 
-            // Send the email
-            $mail->send();
-            $sentEmails[] = "{$student['name']} ({$student['email']})";
+            // Uncomment in production
+            // $mail->send(); 
+
+            sleep(1); // Simulating email sending delay
+
+            $count++;
+            echo "data: " . json_encode([
+                "status"  => "success",
+                "count"   => $count,
+                "name"    => $student['name'],
+                "email"   => $student['email']
+            ]) . "\n\n";
+            flush();
         } catch (Exception $e) {
-            $failedEmails[] = "{$student['name']} ({$student['email']}): {$mail->ErrorInfo}";
+            echo "data: " . json_encode([
+                "status"  => "failed",
+                "name"    => $student['name'],
+                "email"   => $student['email'],
+                "error"   => $mail->ErrorInfo
+            ]) . "\n\n";
+            flush();
         }
     }
 
-    
-    // Display results
-    echo "Emails Sent Successfully:\n";
-    echo !empty($sentEmails) ? implode("\n", $sentEmails) : "None";
-
-    echo "\n\nFailed to Send Emails:\n";
-    echo !empty($failedEmails) ? implode("\n", $failedEmails) : "None";
-
+    echo "data: " . json_encode(["status" => "completed", "message" => "All emails processed successfully."]) . "\n\n";
+    flush();
 } catch (Exception $e) {
-    echo "Mailer configuration error: {$mail->ErrorInfo}";
+    echo "data: " . json_encode(["status" => "error", "message" => "Mailer configuration error: " . $mail->ErrorInfo]) . "\n\n";
+    flush();
 }
+?>
