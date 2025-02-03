@@ -135,6 +135,14 @@ $todayAttendance = $attendanceStmt->fetchAll(PDO::FETCH_ASSOC);
         <!-- Left: Today's Attendance -->
         <div class="attendance-list">
             <h2>Today's Attendance (<?= $today ?>)</h2>
+                <!-- Send Attendance Emails Button -->
+            <div style="margin-bottom: 15px;">
+                <a href="mail_send.php">
+                    <button type="button" style="background-color: #28a745; color: white; padding: 10px 15px; border: none; cursor: pointer; border-radius: 5px;">
+                        Send Attendance Emails
+                    </button>
+                </a>
+            </div>
             <table class="students-table" border="1">
                 <thead>
                     <tr>

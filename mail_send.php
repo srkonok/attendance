@@ -1,9 +1,19 @@
+<?php
+session_start(); // Start the session
+
+if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
+    header("Location: manual_attendance.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Email Sending Progress</title>
+    <link rel="icon" href="images/favicon_io/favicon.ico" type="image/x-icon">
+
     <style>
         body {
             font-family: Arial, sans-serif;
