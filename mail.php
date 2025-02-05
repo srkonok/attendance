@@ -67,9 +67,9 @@ try {
             $mail->Body    = getEmailTemplate($student['name'], $date);
 
             // Uncomment in production
-            // $mail->send(); 
+            $mail->send(); 
 
-            sleep(1); // Simulating email sending delay
+            // sleep(1); // Simulating email sending delay
 
             $count++;
             echo "data: " . json_encode([
