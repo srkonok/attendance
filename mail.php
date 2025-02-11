@@ -68,7 +68,6 @@ try {
 
             // Uncomment in production
             $mail->send(); 
-
             // sleep(1); // Simulating email sending delay
 
             $count++;

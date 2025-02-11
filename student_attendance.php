@@ -94,8 +94,8 @@ $students = $studentsStmt->fetchAll();
                         </a>
                     </th>
                     <th>Name</th>
-                    <th>Email</th>
-                    <th>Phone</th>
+                    <!-- <th>Email</th>
+                    <th>Phone</th> -->
                     <th>Total Attendance</th>
                     <th>Present (%)</th>
                 </tr>
@@ -117,12 +117,12 @@ $students = $studentsStmt->fetchAll();
                             <td><?= htmlspecialchars($student['student_id'] ?? '') ?></td>
                             <td><?= htmlspecialchars($student['section'] ?? '') ?></td>
                             <td><?= htmlspecialchars($student['name'] ?? '') ?></td>
-                            <td>
+                            <!-- <td>
                                 <a href="mailto:<?= htmlspecialchars($student['email'] ?? '') ?>">
                                     <?= htmlspecialchars($student['email'] ?? '') ?>
                                 </a>
-                            </td>
-                            <td>
+                            </td> -->
+                            <!-- <td>
                                 <?php 
                                 $phoneNumber = isset($student['phone_number']) && !empty($student['phone_number']) 
                                     ? '0' . ltrim(htmlspecialchars($student['phone_number']), '0') 
@@ -135,7 +135,7 @@ $students = $studentsStmt->fetchAll();
                                 <?php else: ?>
                                     N/A
                                 <?php endif; ?>
-                            </td>
+                            </td> -->
                             <td><?= $presentCount ?></td>
                             <td><?= $attendancePercentage ?>%</td>
                         </tr>
