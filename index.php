@@ -196,12 +196,8 @@ $attendees = $stmt->fetchAll();
         </div>
 
         <div class="button-container">
-            <a href="/attendance/student-list.php" class="button">All Student List</a>
-        </div>
-        <div class="button-container">
-            <a href="/attendance/student_attendance.php" class="button">Attendance Report</a>
-        </div>
-        <div class="button-container">
+            <a href="/attendance/student-list.php" class="button" style="margin-right: 10px;">All Student List</a>
+            <a href="/attendance/student_attendance.php" class="button" style="margin-right: 10px;">Attendance Report</a>
             <a href="/attendance/manual_attendance.php" class="button">Manual Attendance</a>
         </div>
 
