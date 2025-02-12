@@ -6,6 +6,13 @@ $limit = 15; // Number of students per page
 $page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
 $offset = ($page - 1) * $limit;
 
+// Get the earliest attendance date
+$startDateQuery = "SELECT MIN(date) FROM attendance";
+$startDateStmt = $conn->prepare($startDateQuery);
+$startDateStmt->execute();
+$startDate = $startDateStmt->fetchColumn();
+$startDateFormatted = $startDate ? date("d M Y", strtotime($startDate)) : "Unknown";
+
 // Sorting settings
 $sortColumn = isset($_GET['sort']) && in_array($_GET['sort'], ['section']) ? $_GET['sort'] : 'student_id';
 $sortOrder = isset($_GET['order']) && in_array($_GET['order'], ['asc', 'desc']) ? $_GET['order'] : 'desc';
@@ -65,7 +72,7 @@ $students = $studentsStmt->fetchAll();
 </head>
 <body>
     <div class="students-list">
-        <h2>All Students</h2>
+    <h2>Attendance from <?= htmlspecialchars($startDateFormatted) ?></h2>
 
         <!-- Search Bar -->
         <div class="search-form">
@@ -154,6 +161,27 @@ $students = $studentsStmt->fetchAll();
             <a href="?page=<?= min($totalPages, $page + 1) ?>&sort=<?= $sortColumn ?>&order=<?= $sortOrder ?>&search=<?= htmlspecialchars($searchQuery) ?>" class="<?= $page === $totalPages ? 'disabled' : '' ?>">Next</a>
             <a href="?page=<?= $totalPages ?>&sort=<?= $sortColumn ?>&order=<?= $sortOrder ?>&search=<?= htmlspecialchars($searchQuery) ?>" class="<?= $page === $totalPages ? 'disabled' : '' ?>">Last</a>
         </div>
+        <div class="export-container">
+            <select id="export-format">
+                <option value="excel">Excel (.xlsx)</option>
+                <option value="pdf">PDF (.pdf)</option>
+                <option value="csv">CSV (.csv)</option>
+                <option value="json">JSON (.json)</option>
+                <option value="xml">XML (.xml)</option>
+                <option value="html">HTML (.html)</option>  <!-- Added HTML format -->
+            </select>
+            <button id="export-btn">Export</button>
+        </div>
+
+
     </div>
 </body>
 </html>
+<script>
+    document.getElementById("export-btn").addEventListener("click", function() {
+        var format = document.getElementById("export-format").value;
+        var searchQuery = "<?= urlencode($searchQuery) ?>";
+        window.location.href = "export.php?format=" + format + "&search=" + searchQuery;
+    });
+</script>
+

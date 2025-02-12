@@ -776,3 +776,29 @@ button:hover {
 .button:hover {
     background-color: #218838;
 }
+.export-container {
+    margin: 15px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+#export-format {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+#export-btn {
+    padding: 8px 15px;
+    background-color: #218838;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+#export-btn:hover {
+    background-color: #28a745;
+}
+
