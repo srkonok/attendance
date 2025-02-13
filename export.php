@@ -136,7 +136,13 @@ if ($format === 'pdf') {
         $pdf->Cell($colWidths[2], $rowHeight, $student['section'], 1, 0, 'C', true);
         $pdf->Cell($colWidths[3], $rowHeight, $student['name'], 1, 0, 'L', true);
         $pdf->Cell($colWidths[4], $rowHeight, $student['present_count'], 1, 0, 'C', true);
+        if ((float) $student['attendance_percentage'] < 60) {
+            $pdf->SetTextColor(255, 0, 0); // Red color for low attendance
+        } else {
+            $pdf->SetTextColor(0, 0, 0); // Default color
+        }
         $pdf->Cell($colWidths[5], $rowHeight, $student['attendance_percentage'], 1, 1, 'C', true);
+        $pdf->SetTextColor(0, 0, 0); // Reset to default color for next row
     }
 
     // Output PDF
