@@ -3,8 +3,8 @@ session_start();
 include 'db.php';
 
 // Check if the user is authenticated
-if (!isset($_SESSION['authenticated']) || $_SESSION['authenticated'] !== true) {
-    header("Location: manual_attendance.php");
+if (!isset($_SESSION['user']) || $_SESSION['user'] !== 'admin') {
+    header("Location: login.php");
     exit();
 }
 

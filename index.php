@@ -1,7 +1,12 @@
 <?php
 // Include database connection
 include 'db.php';
+session_start();
 
+if (!isset($_SESSION["user"])) {
+    header("Location: login.php");
+    exit();
+}
 // Function to get client IP address
 function getUserIP()
 {
@@ -140,7 +145,7 @@ $attendees = $stmt->fetchAll();
         <?php if ($formVisible): ?>
             <form method="post" action="">
                 <div class="form-group">
-                    <input type="text" id="student_id" name="student_id" required placeholder="Enter your student ID">
+                <input type="text" id="student_id" name="student_id" value="<?= htmlspecialchars($_SESSION['student_id'] ?? ''); ?>" required readonly>
                 </div>
                 <button type="submit" name="submit_attendance" class="submit-btn">Submit Attendance</button>
             </form>
@@ -198,10 +203,27 @@ $attendees = $stmt->fetchAll();
         <div class="button-container">
             <a href="/attendance/student-list.php" class="button" style="margin-right: 10px;">All Student List</a>
             <a href="/attendance/student_attendance.php" class="button" style="margin-right: 10px;">Attendance Report</a>
-            <a href="/attendance/manual_attendance.php" class="button">Manual Attendance</a>
+            <?php if (isset($_SESSION["user"]) && $_SESSION["user"] === "admin"): ?>
+                <a href="/attendance/mark_attendance.php" class="button">Manual Attendance</a>
+            <?php else: ?>
+                <a href="#" class="button" onclick="showAccessDenied(); return false;">Manual Attendance</a>
+            <?php endif; ?>       
         </div>
 
     </div>
 </body>
 </html>
+<!-- Include SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+function showAccessDenied() {
+    Swal.fire({
+        icon: 'error',
+        title: 'Access Denied',
+        text: 'Admins only!',
+        confirmButtonColor: '#d33',
+        confirmButtonText: 'OK'
+    });
+}
+</script>
 
