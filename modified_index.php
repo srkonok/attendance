@@ -111,26 +111,12 @@ $attendees = $stmt->fetchAll();
   <script src="attendance.js" defer></script>
 </head>
 <body>
-<div class="header-container">
-  <div class="header-content">
-    <h1>CSE 4267: Cloud Computing</h1>
-    <p><?php echo date('l, F j, Y'); ?></p>
-  </div>
-  
-  <div class="menu-container" style="position: absolute; right: 20px; top: 20px;">
-    <button class="menu-button">☰</button>
-    <div class="dropdown-menu">
-      <a href="/attendance/student-list.php">All Student List</a>
-      <a href="/attendance/student_attendance.php">Attendance Report</a>
-      <?php if (isset($_SESSION["user"]) && $_SESSION["user"] === "admin"): ?>
-        <a href="/attendance/mark_attendance.php">Manual Attendance</a>
-      <?php else: ?>
-        <a href="#" onclick="showAccessDenied(); return false;">Manual Attendance</a>
-      <?php endif; ?>
-      <a href="/attendance/logout.php">Logout</a>
+  <div class="header-container">
+    <div class="header-content">
+      <h1>CSE 4267: Cloud Computing</h1>
+      <p><?php echo date('l, F j, Y'); ?></p>
     </div>
   </div>
-</div>
 
   <div class="container">
     <h2>Submit Attendance</h2>
@@ -197,7 +183,7 @@ $attendees = $stmt->fetchAll();
         <a href="?page=<?= ($page + 1); ?>&search_date=<?= urlencode($searchDate); ?>&search_student_id=<?= urlencode($searchStudentId); ?>" class="pagination-link">Next</a>
       <?php endif; ?>
     </div>
-    <!-- <div class="button-container">
+    <div class="button-container">
       <a href="/attendance/student-list.php" class="button" style="margin-right: 10px;">All Student List</a>
       <a href="/attendance/student_attendance.php" class="button" style="margin-right: 10px;">Attendance Report</a>
       <?php if (isset($_SESSION["user"]) && $_SESSION["user"] === "admin"): ?>
@@ -205,7 +191,7 @@ $attendees = $stmt->fetchAll();
       <?php else: ?>
         <a href="#" class="button" onclick="showAccessDenied(); return false;">Manual Attendance</a>
       <?php endif; ?>       
-    </div> -->
+    </div>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -260,7 +246,19 @@ $attendees = $stmt->fetchAll();
   }
 </style>
 
-
+<div class="menu-container">
+  <button class="menu-button">☰</button>
+  <div class="dropdown-menu">
+    <a href="/attendance/student-list.php">All Student List</a>
+    <a href="/attendance/student_attendance.php">Attendance Report</a>
+    <?php if (isset($_SESSION["user"]) && $_SESSION["user"] === "admin"): ?>
+      <a href="/attendance/mark_attendance.php">Manual Attendance</a>
+    <?php else: ?>
+      <a href="#" onclick="showAccessDenied(); return false;">Manual Attendance</a>
+    <?php endif; ?>
+    <a href="/logout.php">Logout</a>
+  </div>
+</div>
 
 </body>
 </html>
