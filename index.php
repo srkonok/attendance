@@ -114,12 +114,13 @@ $attendees = $stmt->fetchAll();
 <div class="header-container">
   <div class="header-content">
     <h1>CSE 4267: Cloud Computing</h1>
-    <p><?php echo date('l, F j, Y'); ?></p>
+    <p><?php echo date('l, F j, Y'); ?>s</p>
   </div>
   
   <div class="menu-container" style="position: absolute; right: 20px; top: 20px;">
     <button class="menu-button">☰</button>
     <div class="dropdown-menu">
+      <a href="/attendance/profile.php">My Profile</a>
       <a href="/attendance/student-list.php">All Student List</a>
       <a href="/attendance/student_attendance.php">Attendance Report</a>
       <?php if (isset($_SESSION["user"]) && $_SESSION["user"] === "admin"): ?>
@@ -127,7 +128,7 @@ $attendees = $stmt->fetchAll();
       <?php else: ?>
         <a href="#" onclick="showAccessDenied(); return false;">Manual Attendance</a>
       <?php endif; ?>
-      <a href="/attendance/logout.php">Logout</a>
+      <a href="/attendance/logout.php" style="color: red;">Logout</a>
     </div>
   </div>
 </div>
