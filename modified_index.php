@@ -200,7 +200,7 @@ $attendees = $stmt->fetchAll();
       Swal.fire({
         icon: 'error',
         title: 'Access Denied',
-        text: 'Jawa Jabe na!',
+        text: 'Admins Only!!',
         confirmButtonColor: '#d33',
         confirmButtonText: 'OK'
       });
