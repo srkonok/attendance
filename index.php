@@ -126,9 +126,19 @@ $attendees = $stmt->fetchAll();
       <?php if (isset($_SESSION["user"]) && $_SESSION["user"] === "admin"): ?>
         <a href="/attendance/mark_attendance.php">Manual Attendance</a>
       <?php else: ?>
-        <a href="#" onclick="showAccessDenied(); return false;">Manual Attendance</a>
+        <a href="#" onclick="showAccessDenied(); return false;">Manual Attendance❗</a>
       <?php endif; ?>
-      <a href="/attendance/logout.php" style="color: red;">Logout</a>
+      <?php if (isset($_SESSION["user"]) && $_SESSION["user"] === "admin"): ?>
+        <a href="/attendance/marks_entry.php">Enter Marks</a>
+      <?php else: ?>
+        <a href="#" onclick="showAccessDenied(); return false;">Enter Marks❗</a>
+      <?php endif; ?>
+      <?php if (isset($_SESSION["user"]) && $_SESSION["user"] === "admin"): ?>
+        <a href="/attendance/all_students_marks.php?search=B">All Students Marks</a>
+      <?php else: ?>
+        <a href="#" onclick="showAccessDenied(); return false;">All Students Marks❗</a>
+      <?php endif; ?>
+      <a href="/attendance/logout.php?search=B" style="color: red;">Logout</a>
     </div>
   </div>
 </div>

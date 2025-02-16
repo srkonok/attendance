@@ -802,3 +802,40 @@ button:hover {
     background-color: #28a745;
 }
 
+/* Ensure the table is responsive */
+.table-container {
+    width: 100%;
+    overflow-x: auto; /* Enables horizontal scrolling */
+    border: 1px solid #ddd; /* Optional border for better visibility */
+}
+
+/* Prevent text from wrapping in table cells */
+.students-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 900px; /* Ensures table doesn't shrink too much */
+}
+
+/* Ensures each cell has proper padding */
+.students-table th, .students-table td {
+    padding: 8px;
+    text-align: left;
+    white-space: nowrap; /* Prevents breaking of text in a single row */
+}
+
+/* Add a border to make the table readable */
+.students-table th {
+    background: #f4f4f4;
+    border-bottom: 2px solid #ddd;
+}
+
+.students-table td {
+    border-bottom: 1px solid #ddd;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .students-table {
+        min-width: 700px; /* Ensure table is still readable */
+    }
+}

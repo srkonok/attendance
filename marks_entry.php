@@ -1,7 +1,12 @@
 <?php
 session_start();
+
 require_once 'db.php'; // Include database connection
 
+if (!isset($_SESSION['user']) || $_SESSION['user'] !== 'admin') {
+    header("Location: login.php");
+    exit();
+}
 $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // Enable error reporting
 
 // Fetch students for the dropdown
