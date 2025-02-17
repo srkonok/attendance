@@ -1,39 +1,55 @@
-name: PHP Composer
+name: CI/CD to EC2
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
-permissions:
-  contents: read
-
+      
 jobs:
-  build:
-
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-
-    - name: Validate composer.json and composer.lock
-      run: composer validate --strict
-
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v3
+    - name: Checkout 'main' branch
+      uses: actions/checkout@v2
       with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
+        ref: main
 
     - name: Install dependencies
-      run: composer install --prefer-dist --no-progress
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y zip
 
-    # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
-    # Docs: https://getcomposer.org/doc/articles/scripts.md
+    - name: Set up SSH key permissions
+      run: |
+        echo "$EC2_SSH_KEY" > ssh_key.pem
+        chmod 600 ssh_key.pem
+      env:
+        EC2_SSH_KEY: ${{ secrets.EC2_SSH_KEY }}
 
-    # - name: Run test suite
-    #   run: composer run-script test
+    - name: Prepare and Deploy
+      run: |
+        set -e
+        set -x
+
+        mkdir .attendance
+        echo "copy start"
+        cp -r * .attendance
+        echo "copy end, move start"
+        mv .attendance attendance
+        echo "zip start"
+        zip -r attendance.zip attendance
+        echo "zip end"
+
+
+        scp -o StrictHostKeyChecking=no -i ssh_key.pem attendance.zip ${{secrets.EC2_USERNAME}}@${{secrets.EC2_HOST}}:/var/www/html
+
+        ssh -o StrictHostKeyChecking=no -i ssh_key.pem ${{secrets.EC2_USERNAME}}@${{secrets.EC2_HOST}} "cd /var/www/html && unzip -o attendance.zip"
+
+
+
+        echo "Application successfully deployed."
+
+    - name: Clean up
+      run: rm -rf attendance attendance.zip ssh_key.pem
