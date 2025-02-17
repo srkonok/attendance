@@ -22,5 +22,6 @@ function getEmailTemplate($studentName, $date) {
             </p>
         </div>
     </div>";
+    
 }
 ?>
