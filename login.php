@@ -45,52 +45,58 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Cloud Computing Class - Login</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background: linear-gradient(to right, #28a745, #a8e063);
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            margin: 0;
         }
         .login-container {
             background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-            width: 300px;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+            width: 350px;
             text-align: center;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            position: relative;
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .login-container h2 {
+            color: #28a745;
             margin-bottom: 20px;
         }
         .input-container {
-            width: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
         }
         input[type="email"], input[type="password"] {
             width: 90%;
-            padding: 10px;
+            padding: 12px;
             margin: 10px 0;
             border: 1px solid #ccc;
-            border-radius: 5px;
+            border-radius: 8px;
+            font-size: 16px;
         }
         button {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             background: #28a745;
             border: none;
             color: white;
-            font-size: 16px;
-            border-radius: 5px;
+            font-size: 18px;
+            border-radius: 8px;
             cursor: pointer;
+            transition: background 0.3s ease;
         }
         button:hover {
             background: #218838;
@@ -99,11 +105,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             color: red;
             margin-top: 10px;
         }
+        .cloud-icon {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 15px;
+        }
     </style>
 </head>
 <body>
     <div class="login-container">
-        <h2>Login</h2>
+        <img src="https://cdn-icons-png.flaticon.com/512/2620/2620218.png" alt="Cloud Icon" class="cloud-icon">
+        <h2>Cloud Computing Class Login</h2>
         <?php if (!empty($error)) echo "<p class='error'>$error</p>"; ?>
         <form method="POST" class="input-container">
             <input type="email" name="username" placeholder="Email" required>
