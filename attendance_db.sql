@@ -122,7 +122,7 @@ INSERT INTO `attendance` (`id`, `student_id`, `ip_address`, `date`) VALUES
 --
 -- Table structure for table `students`
 --
-
+ 
 CREATE TABLE `students` (
   `id` int NOT NULL,
   `student_id` varchar(20) NOT NULL,
