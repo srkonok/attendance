@@ -26,7 +26,7 @@ jobs:
     - name: Test SSH Connection
       run: |
         ssh -o StrictHostKeyChecking=no -i ssh_key.pem ${{ secrets.EC2_USERNAME }}@${{ secrets.EC2_HOST }} "echo Connected successfully"
-
+ 
     - name: Prepare and Deploy
       run: |
         set -e
