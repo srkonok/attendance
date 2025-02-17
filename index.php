@@ -143,7 +143,7 @@ $attendees = $stmt->fetchAll();
   </div>
 </div>
 
-  <div class="container">
+  <!-- <div class="container">
     <h2>Submit Attendance</h2>
     <?php if (!empty($message)): ?>
       <div class="message <?=$alertClass;?>">
@@ -158,10 +158,12 @@ $attendees = $stmt->fetchAll();
         <button type="submit" name="submit_attendance" class="submit-btn">Submit Attendance</button>
       </form>
     <?php endif; ?>
-  </div>
+  </div> -->
 
   <!-- Include the dashboard below the Submit Attendance section -->
-  <?php include 'dashboard.php'; ?>
+  <div style='margin-top:100px'>
+    <?php include 'dashboard.php'; ?>
+  </div>
 
   <div class="attendance-list">
     <h2>Today's Attendance</h2>
