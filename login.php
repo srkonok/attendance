@@ -45,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cloud Computing Class - Login</title>
+    <title>CSE 4276: Class - Login</title>
     <style>
         body {
             font-family: Arial, sans-serif;
