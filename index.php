@@ -114,7 +114,7 @@ $attendees = $stmt->fetchAll();
 <div class="header-container">
   <div class="header-content">
     <h1>CSE 4267: Cloud Computing</h1>
-    <p><?php echo date('l, F j, Y'); ?>s</p>
+    <p><?php echo date('l, F j, Y'); ?></p>
   </div>
   
   <div class="menu-container" style="position: absolute; right: 20px; top: 20px;">

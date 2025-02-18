@@ -53,33 +53,33 @@ $graphData = $graphStmt->fetchAll(PDO::FETCH_ASSOC);
       margin: 0;
       padding: 20px;
     }
-    /* Wrapper for consistent width */
+    /* Wrapper - Wider Layout */
     .wrapper {
-      max-width: 600px; /* Sum of two card widths */
+      max-width: 800px; /* Increased width */
       margin: 0 auto;
-      padding: 0 10px;
+      padding: 0 15px;
     }
-    /* 2x2 Grid for cards */
+    /* Grid Layout - Keep 2x2 on Mobile */
     .dashboard {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
-      margin-bottom: 20px;
+      gap: 20px; /* Spacing */
+      margin-bottom: 30px;
     }
     .card {
       background: #fff;
       padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
       text-align: center;
     }
     .card h3 {
       margin-bottom: 10px;
       color: #333;
-      font-size: 1.2em;
+      font-size: 1.3em;
     }
     .card p {
-      font-size: 1.4em;
+      font-size: 1.5em;
       font-weight: bold;
       margin: 0;
     }
@@ -89,39 +89,40 @@ $graphData = $graphStmt->fetchAll(PDO::FETCH_ASSOC);
       color: #666;
       font-size: 0.9em;
     }
-    /* Chart container matching the wrapper width */
+    /* Wider Chart Container */
     .chart-container {
       background: #fff;
-      padding: 10px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      width: 100%; /* Same as wrapper (600px max) */
-      height: 300px; /* Fixed height for desktop */
-      margin: 20px auto;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      height: 350px; /* Adjusted height */
+      margin: 25px auto;
     }
     canvas {
       max-width: 100%;
       height: 100%;
     }
-    /* Mobile adjustments */
+    /* Keep 2x2 Grid on Mobile */
     @media (max-width: 600px) {
       .dashboard {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, 1fr); /* Keeps 2x2 layout */
+        gap: 15px; /* Adjust spacing */
       }
       .card h3 {
-        font-size: 1em;
+        font-size: 1.1em;
       }
       .card p {
-        font-size: 1.2em;
+        font-size: 1.3em;
       }
       .chart-container {
-        height: 250px;
+        height: 280px;
       }
     }
   </style>
 </head>
 <body>
-  <div class="wrapper" style="margin-top: 20px;">
+  <div class="wrapper">
     <div class="dashboard">
       <div class="card">
         <h3>Total Students</h3>
