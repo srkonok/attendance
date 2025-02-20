@@ -115,7 +115,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
     <div class="login-container">
         <img src="https://cdn-icons-png.flaticon.com/512/2620/2620218.png" alt="Cloud Icon" class="cloud-icon">
-        <h2>CSE 4267 Class Login</h2>
+        <h2>Cloud Computing Class Login</h2>
         <?php if (!empty($error)) echo "<p class='error'>$error</p>"; ?>
         <form method="POST" class="input-container">
             <input type="email" name="username" placeholder="Email" required>
