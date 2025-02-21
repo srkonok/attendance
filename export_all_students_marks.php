@@ -135,11 +135,9 @@
                 <?php foreach ($students as $index => $student):
                         $present    = (int) ($student['present_count'] ?? 0);
                         $percentage = $totalClasses > 0 ? round(($present / $totalClasses) * 100, 2) : 0;
-                        $serial = ($page - 1) * $limit + $index + 1;  // Add this line
-
                     ?>
 		                <tr>
-		                    <td><?php echo $serial ?></td>
+		                    <td><?php echo $index + 1 ?></td>
 		                    <td><?php echo htmlspecialchars($student['student_id']) ?></td>
 		                    <td><?php echo htmlspecialchars($student['name']) ?></td>
 		                    <td><?php echo htmlspecialchars($student['section']) ?></td>
@@ -164,7 +162,7 @@
                 <a href="?page=<?php echo $page - 1 ?>&search=<?php echo urlencode($searchQuery) ?>">Previous</a>
             <?php endif; ?>
 
-            <span>Page                       <?php echo $page ?> of <?php echo $totalPages ?></span>
+            <span>Page                       <?php echo $page ?> of<?php echo $totalPages ?></span>
 
             <?php if ($page < $totalPages): ?>
                 <a href="?page=<?php echo $page + 1 ?>&search=<?php echo urlencode($searchQuery) ?>">Next</a>
