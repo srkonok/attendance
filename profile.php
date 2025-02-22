@@ -2,8 +2,19 @@
 session_start();
 require_once 'db.php'; // Include the database connection
 
-if (!isset($_SESSION['student_id'])) {
-    die("Access Denied: No Student ID Found");
+if (!isset($_SESSION['user'])) {
+    header("Location: login.php");
+    exit();
+}
+
+if ($_SESSION['user'] === 'admin') {
+    if (!isset($_SESSION['student_id'])) {
+        die("Access Denied: No Student ID Found");
+    }
+} elseif ($_SESSION['student_id']) {
+    $student_id = $_SESSION['student_id'];
+} else {
+    die("Access Denied: Unauthorized User");
 }
 
 $student_id = $_SESSION['student_id'];
@@ -142,7 +153,7 @@ $marks = $stmt_marks->fetch(PDO::FETCH_ASSOC);
                 <td><?= htmlspecialchars($marks['assignment_2'] ?? '0') ?>/10</td>
             </tr>
         </table>
-        
+        <button style="margin-top:15px;background-color: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;" onclick="window.location.href='student_profile.php'">Submit a review</button>
     </div>
 </body>
 </html>

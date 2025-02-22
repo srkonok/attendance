@@ -90,7 +90,9 @@ $requests = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
         <h3>Request Review</h3>
         <form id="reviewRequestForm">
-            <select id="type" name="type" required>
+            <div style="margin-bottom: 15px;">
+            <label for="type" style="display: block; margin-bottom: 5px;">Select Review Type</label>
+            <select id="type" name="type" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
                 <option value="">Select Review Type</option>
                 <option value="Quiz_1">Quiz 1</option>
                 <option value="Quiz_2">Quiz 2</option>
@@ -99,7 +101,8 @@ $requests = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <option value="Assignment_2">Assignment 2</option>
                 <option value="Attendance">Attendance</option>
             </select>
-            <button type="submit">Submit Request</button>
+            </div>
+            <button type="submit" style="background-color: #28a745; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Submit Request</button>
         </form>
     </div>
 
