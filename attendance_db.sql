@@ -122,7 +122,15 @@ INSERT INTO `attendance` (`id`, `student_id`, `ip_address`, `date`) VALUES
 --
 -- Table structure for table `students`
 --
- 
+CREATE TABLE `review_requests` (
+  `id` int NOT NULL,
+  `student_id` varchar(50) NOT NULL,
+  `type` enum('Quiz_1','Quiz_2','Quiz_3','Assignment_1','Assignment_2','Attendance') NOT NULL,
+  `status` enum('reviewed','pending') NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+);
+
 CREATE TABLE `students` (
   `id` int NOT NULL,
   `student_id` varchar(20) NOT NULL,

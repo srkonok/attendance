@@ -114,15 +114,15 @@ $marks = $stmt_marks->fetch(PDO::FETCH_ASSOC);
                 <th>Marks</th>
             </tr>
             <tr>
-                <td>Test 1</td>
+                <td>Quiz 1</td>
                 <td><?= htmlspecialchars($marks['class_test_1'] ?? '0') ?>/20</td>
             </tr>
             <tr>
-                <td>Test 2</td>
+                <td>Quiz 2</td>
                 <td><?= htmlspecialchars($marks['class_test_2'] ?? '0') ?>/20</td>
             </tr>
             <tr>
-                <td>Test 3</td>
+                <td>Quiz 3</td>
                 <td><?= htmlspecialchars($marks['class_test_3'] ?? '0') ?>/20</td>
             </tr>
         </table>
@@ -142,6 +142,7 @@ $marks = $stmt_marks->fetch(PDO::FETCH_ASSOC);
                 <td><?= htmlspecialchars($marks['assignment_2'] ?? '0') ?>/10</td>
             </tr>
         </table>
+        
     </div>
 </body>
 </html>
