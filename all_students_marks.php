@@ -112,13 +112,6 @@
             </form>
         </div>
 
-        <!-- Export Controls -->
-        <select onchange="handleExport(this.value)" style="margin: 10px 0;">
-            <option value="">Export Format</option>
-            <option value="pdf">PDF</option>
-            <option value="csv">CSV</option>
-            <option value="excel">Excel</option>
-        </select>
 
         <!-- Data Table -->
         <div class="table-wrapper">
@@ -172,6 +165,17 @@
             <?php endif; ?>
         </div>
         <?php endif; ?>
+
+        <!-- Export Controls -->
+        <div class="export-controls" style="display: flex; justify-content: flex-end; margin-top: 1.5rem;">
+            <label for="exportFormat" style="margin-right: 10px; margin-top: 15px;">Export as:</label>
+            <select id="exportFormat" onchange="handleExport(this.value)">
+            <option value="">Select Format</option>
+            <option value="pdf">PDF</option>
+            <option value="csv">CSV</option>
+            <option value="excel">Excel</option>
+            </select>
+        </div>
         <!-- </div> -->
     </div>
 
