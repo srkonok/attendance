@@ -134,11 +134,11 @@ $attendees = $stmt->fetchAll();
         <a href="#" onclick="showAccessDenied(); return false;">Enter Marks❗</a>
       <?php endif; ?>
       <?php if (isset($_SESSION["user"]) && $_SESSION["user"] === "admin"): ?>
-        <a href="/attendance/all_students_marks.php?search=B">All Students Marks</a>
+        <a href="/attendance/export_all_students_marks.php">All Students Marks</a>
       <?php else: ?>
         <a href="#" onclick="showAccessDenied(); return false;">All Students Marks❗</a>
       <?php endif; ?>
-      <a href="/attendance/logout.php?search=B" style="color: red;">Logout</a>
+      <a href="/attendance/logout.php" style="color: red;">Logout</a>
     </div>
   </div>
 </div>
