@@ -130,7 +130,7 @@ $marks = $marks_stmt->fetch(PDO::FETCH_ASSOC) ?: [];
                 <p><strong>Name:</strong> <?= htmlspecialchars($student['name']) ?></p>
                 <p><strong>Student ID:</strong> <?= htmlspecialchars($student['student_id']) ?></p>
                 <p><strong>Email:</strong> <?= htmlspecialchars($student['email']) ?></p>
-                <p><strong>Phone:</strong> <?= htmlspecialchars($student['phone_number']) ?></p>
+		<p><strong>Phone:</strong> 0<?= htmlspecialchars($student['phone_number']) ?></p>
             </div>
 
             <div class="info-card">
@@ -179,7 +179,7 @@ $marks = $marks_stmt->fetch(PDO::FETCH_ASSOC) ?: [];
             
             // Scale best three scores to a total of 20 marks
             // Maximum bestThree is 60, so we divide by 3 and round (6.5 becomes 7)
-            $academicMark = round($bestThree / 3, 0, PHP_ROUND_HALF_UP);
+            $academicMark = ceil($bestThree / 3);
             
             // Calculate attendance marks: each 10% attendance gives 1 mark (using floor)
             $attendanceMark = ($attendance_percentage >= 80) ? 10 : floor(($attendance_percentage / 80) * 10);
