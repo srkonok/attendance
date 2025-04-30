@@ -1,5 +1,5 @@
 # Attendance Management System
-
+ 
 This is a simple web-based Attendance Management System that allows users to manage attendance records. The system features a user-friendly interface, enabling users to efficiently add, view, and search attendance data.
 
 ---
