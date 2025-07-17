@@ -130,7 +130,7 @@ $marks = $marks_stmt->fetch(PDO::FETCH_ASSOC) ?: [];
                 <p><strong>Name:</strong> <?= htmlspecialchars($student['name']) ?></p>
                 <p><strong>Student ID:</strong> <?= htmlspecialchars($student['student_id']) ?></p>
                 <p><strong>Email:</strong> <?= htmlspecialchars($student['email']) ?></p>
-		<p><strong>Phone:</strong> 0<?= htmlspecialchars($student['phone_number']) ?></p>
+                <p><strong>Phone:</strong> <?= '0' . htmlspecialchars($student['phone_number']) ?></p>
             </div>
 
             <div class="info-card">

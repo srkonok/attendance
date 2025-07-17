@@ -19,7 +19,7 @@ $newSortOrder = ($sortOrder === 'asc') ? 'desc' : 'asc';
 $condition = "s.name LIKE :search OR s.student_id LIKE :search"; // Default condition
 
 // Modify the condition if the search query is 'A' or 'B' (for section-based filtering)
-if ($searchQuery == 'A' || $searchQuery == 'B') {
+if ($searchQuery == 'A' || $searchQuery == 'B' || $searchQuery == 'C') {
     $condition = "s.section LIKE :search";
 }
 
