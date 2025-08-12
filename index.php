@@ -1811,4 +1811,19 @@ $attendees = $stmt->fetchAll();
         }, 300);
       });
 
+      // Create initial particles
+      createParticles();
+      // Add ripple effect to buttons
+      const buttons = document.querySelectorAll('.btn, button[type="submit"], .menu-button');
+      buttons.forEach(button => {
+        button.addEventListener('click', createRipple);
+      });
+
+    }
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', initializeMobileResponsive);
+  </script>
+</body>
+</html>
+<?php
       

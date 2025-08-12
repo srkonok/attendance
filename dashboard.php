@@ -1,3 +1,46 @@
+<?php
+// Include database connection
+include 'db.php';
+
+if (!isset($_SESSION["user"])) {
+    header("Location: login.php");
+    exit();
+}
+
+// Get total number of students
+$totalStudentsQuery = "SELECT COUNT(*) FROM students";
+$totalStudentsStmt = $conn->prepare($totalStudentsQuery);
+$totalStudentsStmt->execute();
+$totalStudents = $totalStudentsStmt->fetchColumn();
+
+// Get today's present students
+$todayDate = date('Y-m-d');
+$presentStudentsQuery = "SELECT COUNT(DISTINCT student_id) FROM attendance WHERE date = :date";
+$presentStudentsStmt = $conn->prepare($presentStudentsQuery);
+$presentStudentsStmt->execute(['date' => $todayDate]);
+$presentStudents = $presentStudentsStmt->fetchColumn();
+
+// Calculate attendance percentage
+$attendancePercentage = ($totalStudents > 0) ? ($presentStudents / $totalStudents) * 100 : 0;
+
+// Get last class attendance (attendance for the most recent date before today)
+$lastClassQuery = "SELECT date, COUNT(DISTINCT student_id) as count FROM attendance WHERE date < :today GROUP BY date ORDER BY date DESC LIMIT 1";
+$lastClassStmt = $conn->prepare($lastClassQuery);
+$lastClassStmt->execute(['today' => $todayDate]);
+$lastClass = $lastClassStmt->fetch(PDO::FETCH_ASSOC);
+
+$lastClassDate = $lastClass ? $lastClass['date'] : 'N/A';
+$lastClassAttendance = $lastClass ? $lastClass['count'] : 0;
+
+// Fetch day-wise attendance data for graph (last 14 days)
+$graphQuery = "SELECT date, COUNT(DISTINCT student_id) as count FROM attendance WHERE date >= DATE_SUB(CURDATE(), INTERVAL 90 DAY) GROUP BY date ORDER BY date ASC";
+$graphStmt = $conn->prepare($graphQuery);
+$graphStmt->execute();
+$graphData = $graphStmt->fetchAll(PDO::FETCH_ASSOC);
+
+// Calculate absent students for today
+$absentStudents = $totalStudents - $presentStudents;
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -444,26 +487,26 @@ body {
     <div class="stats-grid">
         <div class="stat-card">
             <h3><i class="fas fa-users"></i> Total Students</h3>
-            <div class="stat-number" data-count="120">0</div>
+            <div class="stat-number" data-count="<?php echo $totalStudents; ?>">0</div>
             <p class="stat-subtitle">Registered</p>
         </div>
 
         <div class="stat-card">
             <h3><i class="fas fa-user-check"></i> Present Today</h3>
-            <div class="stat-number" data-count="105">0</div>
-            <p class="stat-subtitle">Aug 12</p>
+            <div class="stat-number" data-count="<?php echo $presentStudents; ?>">0</div>
+            <p class="stat-subtitle"><?php echo date('M j'); ?></p>
         </div>
 
         <div class="stat-card percentage">
             <h3><i class="fas fa-percentage"></i> Rate</h3>
-            <div class="stat-number" data-count="87.5">0</div>
+            <div class="stat-number" data-count="<?php echo number_format($attendancePercentage, 1); ?>">0</div>
             <p class="stat-subtitle">Percentage</p>
         </div>
 
         <div class="stat-card">
             <h3><i class="fas fa-calendar-alt"></i> Last Class</h3>
-            <div class="stat-number" data-count="98">0</div>
-            <p class="stat-subtitle">Aug 11</p>
+            <div class="stat-number" data-count="<?php echo $lastClassAttendance; ?>">0</div>
+            <p class="stat-subtitle"><?php echo $lastClassDate !== 'N/A' ? date('M j', strtotime($lastClassDate)) : 'N/A'; ?></p>
         </div>
     </div>
 
@@ -476,25 +519,25 @@ body {
                     <circle cx="50" cy="50" r="45" class="progress-bg"></circle>
                     <circle cx="50" cy="50" r="45" class="progress-fill"></circle>
                 </svg>
-                <div class="progress-text">87.5%</div>
+                <div class="progress-text"><?php echo number_format($attendancePercentage, 1); ?>%</div>
             </div>
 
             <div class="quick-stats">
                 <div class="quick-stat-item">
                     <span class="label"><i class="fas fa-user-plus"></i> Present</span>
-                    <span class="value">105</span>
+                    <span class="value"><?php echo $presentStudents; ?></span>
                 </div>
                 <div class="quick-stat-item">
                     <span class="label"><i class="fas fa-user-minus"></i> Absent</span>
-                    <span class="value">15</span>
+                    <span class="value"><?php echo $absentStudents; ?></span>
                 </div>
                 <div class="quick-stat-item">
                     <span class="label"><i class="fas fa-users"></i> Total</span>
-                    <span class="value">120</span>
+                    <span class="value"><?php echo $totalStudents; ?></span>
                 </div>
                 <div class="quick-stat-item">
                     <span class="label"><i class="fas fa-history"></i> Previous</span>
-                    <span class="value">98</span>
+                    <span class="value"><?php echo $lastClassAttendance; ?></span>
                 </div>
             </div>
         </div>
@@ -513,9 +556,16 @@ body {
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Sample data for demo
-    const chartLabels = ['Jul 29', 'Jul 30', 'Jul 31', 'Aug 1', 'Aug 2', 'Aug 5', 'Aug 6', 'Aug 7', 'Aug 8', 'Aug 9', 'Aug 10', 'Aug 11', 'Aug 12'];
-    const chartValues = [95, 102, 88, 110, 98, 115, 92, 108, 96, 103, 89, 98, 105];
+    // Get chart data from PHP
+    const chartData = <?php echo json_encode($graphData); ?>;
+    const chartLabels = chartData.map(item => {
+        const date = new Date(item.date);
+        return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    });
+    const chartValues = chartData.map(item => parseInt(item.count));
+    
+    // Get actual percentage for progress circle
+    const actualPercentage = <?php echo $attendancePercentage; ?>;
 
     // Animate numbers
     function animateValue(element, start, end, duration) {
@@ -551,7 +601,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Progress circle animation
-    const percentage = 87.5;
     const circle = document.querySelector('.progress-fill');
     const radius = 45;
     const circumference = 2 * Math.PI * radius;
@@ -560,7 +609,7 @@ document.addEventListener('DOMContentLoaded', function() {
     circle.style.strokeDashoffset = circumference;
     
     setTimeout(() => {
-        const offset = circumference - (percentage / 100) * circumference;
+        const offset = circumference - (actualPercentage / 100) * circumference;
         circle.style.strokeDashoffset = offset;
     }, 500);
 
@@ -615,7 +664,15 @@ document.addEventListener('DOMContentLoaded', function() {
                         bodyColor: '#059669',
                         borderColor: '#10b981',
                         borderWidth: 1,
-                        cornerRadius: 8
+                        cornerRadius: 8,
+                        callbacks: {
+                            title: function(context) {
+                                return 'Date: ' + context[0].label;
+                            },
+                            label: function(context) {
+                                return 'Students Present: ' + context.parsed.y;
+                            }
+                        }
                     }
                 },
                 scales: {
