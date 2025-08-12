@@ -1632,7 +1632,7 @@ $attendees = $stmt->fetchAll();
                   title: 'Search Criteria Required',
                   text: 'Please enter either a Student ID or select a date to search.',
                   confirmButtonColor: '#22c55e',
-                  background: 'rgba(15, 23, 42, 0.95)',
+                  background: 'rgba(28, 204, 16, 0.95)',
                   color: '#ffffff'
                 });
               }
@@ -1719,9 +1719,9 @@ $attendees = $stmt->fetchAll();
         text: 'Admins Only!!',
         confirmButtonColor: '#22c55e',
         confirmButtonText: 'OK',
-        background: 'rgba(15, 23, 42, 0.95)',
-        backdrop: 'rgba(0, 0, 0, 0.8)',
-        color: '#ffffff',
+        background: 'rgba(255, 255, 255, 1)',
+        // backdrop: 'rgba(0, 0, 0, rgb(12, 167, 117).8)',
+        // color: '#rgb(12, 167, 117)',
         customClass: {
           popup: 'swal-custom-popup'
         }

@@ -387,7 +387,7 @@ $marks = $marks_stmt->fetch(PDO::FETCH_ASSOC) ?: [];
 <body>
     <div class="main-container">
         <header class="header">
-            <h1>Student Dashboard</h1>
+            <h2>Student Dashboard</h2>
             <!-- <p>Welcome to your elegant academic profile</p> -->
         </header>
 
@@ -464,7 +464,7 @@ $marks = $marks_stmt->fetch(PDO::FETCH_ASSOC) ?: [];
                             <tr><th>Assignment</th><th>Score</th></tr>
                         </thead>
                         <tbody>
-                            <tr><td>Assignment 1</td><td><?= $marks['assignment_1'] ?? 0 ?>/10</td></tr>
+                            <tr><td>Assignment 1</td><td><?= $marks['assignment_1'] ?? 0 ?>/20</td></tr>
                             <tr><td>Assignment 2</td><td><?= $marks['assignment_2'] ?? 0 ?>/10</td></tr>
                         </tbody>
                     </table>
