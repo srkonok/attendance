@@ -240,6 +240,7 @@ $attendees = $stmt->fetchAll();
     }
 
     .menu-button {
+      /* margin-top: 20px; */
       background: rgba(255, 255, 255, 0.9);
       border: 2px solid #10b981;
       border-radius: 12px;
@@ -256,6 +257,11 @@ $attendees = $stmt->fetchAll();
       align-items: center;
       justify-content: center;
       outline: none;
+    }
+    @media (max-width: 768px) {
+    .menu-button {
+        margin-top: 20px;
+      }
     }
 
     .menu-button:hover,
@@ -1195,7 +1201,6 @@ $attendees = $stmt->fetchAll();
         <h1><i class="fas fa-cloud"></i> CSE 4267: Cloud Computing</h1>
         <p><i class="fas fa-calendar"></i> <?php echo date('l, F j, Y'); ?></p>
       </div>
-      
       <div class="menu-container" id="menuContainer">
         <button class="menu-button" id="menuButton" aria-label="Menu" aria-haspopup="true" aria-expanded="false">
           <i class="fas fa-bars"></i>
@@ -1222,6 +1227,7 @@ $attendees = $stmt->fetchAll();
           <a href="/attendance/logout.php" style="color: #f87171;" role="menuitem"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </div>
       </div>
+      
     </div>
   </div>
 
@@ -1233,7 +1239,7 @@ $attendees = $stmt->fetchAll();
       </div>
     <?php endif; ?>
 
-    <?php if ($formVisible && isset($_SESSION['student_id'])): ?>
+    <!-- <?php if ($formVisible && isset($_SESSION['student_id'])): ?>
       <div class="card">
         <h2><i class="fas fa-check-circle"></i> Submit Attendance</h2>
         <form method="post" action="">
@@ -1245,7 +1251,7 @@ $attendees = $stmt->fetchAll();
           </button>
         </form>
       </div>
-    <?php endif; ?>
+    <?php endif; ?> -->
 
     <!-- Include the dashboard below the Submit Attendance section -->
     <div style='margin-top: 40px'>
