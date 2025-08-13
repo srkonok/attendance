@@ -61,7 +61,7 @@ $absentStudents = $totalStudents - $presentStudents;
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    /* background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%); */
     min-height: 100vh;
     color: #1e293b;
     -webkit-font-smoothing: antialiased;
