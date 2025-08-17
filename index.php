@@ -225,7 +225,7 @@ $attendees = $stmt->fetchAll();
         <tbody>
           <?php if (empty($attendees)): ?>
             <tr>
-              <td colspan="4" style="text-align: center; color: rgba(255, 255, 255, 0.6); padding: 40px;">
+              <td colspan="4" style="text-align: center; color: #374151; padding: 40px;">
                 <i class="fas fa-info-circle" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i>
                 No attendance records found.
               </td>

@@ -1,42 +1,42 @@
 <?php
-    session_start();
-    include 'db.php'; // Include database connection
+session_start();
+include 'db.php'; // Include database connection
 
-    $admin_email    = $_ENV['MAIL_FROM_ADDRESS'] ?? 'admin@example.com';
-    $admin_password = $_ENV['MANUAL_ATTENDANCE_PASSWORD'] ?? '2245';
+$admin_email = $_ENV['MAIL_FROM_ADDRESS'] ?? 'admin@example.com';
+$admin_password = $_ENV['MANUAL_ATTENDANCE_PASSWORD'] ?? '2245';
 
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $username = $_POST["username"];
-        $password = $_POST["password"];
-
-        try {
-            if ($username === $admin_email && $password === $admin_password) {
-                session_destroy(); // Clear previous session
-                session_start();   // Start a new session
-                $_SESSION["user"] = "admin";
-
-                header("Location: index.php"); // Redirect to admin dashboard
-                exit();
-            }
-
-            $stmt = $conn->prepare("SELECT * FROM students WHERE email = :email AND student_id = :student_id");
-            $stmt->bindParam(":email", $username);
-            $stmt->bindParam(":student_id", $password);
-            $stmt->execute();
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
-            if ($result) {
-                $_SESSION["user"]       = $username;
-                $_SESSION['student_id'] = $password;
-                header("Location: index.php"); // Redirect to dashboard
-                exit();
-            } else {
-                $error = "Invalid email or student ID";
-            }
-        } catch (PDOException $e) {
-            $error = "Database error: " . $e->getMessage();
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $username = $_POST["username"];
+    $password = $_POST["password"];
+    
+    try {
+        if ($username === $admin_email && $password === $admin_password) {
+            session_destroy(); // Clear previous session
+            session_start(); // Start a new session
+            $_SESSION["user"] = "admin";
+            
+            header("Location: index.php"); // Redirect to admin dashboard
+            exit();
         }
+        
+        $stmt = $conn->prepare("SELECT * FROM students WHERE email = :email AND student_id = :student_id");
+        $stmt->bindParam(":email", $username);
+        $stmt->bindParam(":student_id", $password);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if ($result) {
+            $_SESSION["user"] = $username;
+            $_SESSION['student_id'] = $password;
+            header("Location: index.php"); // Redirect to dashboard
+            exit();
+        } else {
+            $error = "Invalid email or student ID";
+        }
+    } catch (PDOException $e) {
+        $error = "Database error: " . $e->getMessage();
     }
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -161,11 +161,11 @@
         }
 
         @keyframes glow {
-            from {
+            from { 
                 filter: drop-shadow(0 0 10px rgba(5, 150, 105, 0.3));
                 transform: scale(1);
             }
-            to {
+            to { 
                 filter: drop-shadow(0 0 20px rgba(5, 150, 105, 0.6));
                 transform: scale(1.05);
             }
@@ -531,7 +531,7 @@
             </p>
         </div>
 
-        <?php if (! empty($error)): ?>
+        <?php if (!empty($error)): ?>
             <div class="error-message">
                 <?php echo htmlspecialchars($error); ?>
             </div>
@@ -543,10 +543,10 @@
                     <i class="fas fa-envelope"></i> Email Address
                 </label>
                 <div class="input-wrapper">
-                    <input
-                        type="email"
+                    <input 
+                        type="email" 
                         id="username"
-                        name="username"
+                        name="username" 
                         placeholder="Enter your email address"
                         required
                         value="<?php echo isset($_POST['username']) ? htmlspecialchars($_POST['username']) : ''; ?>"
@@ -560,10 +560,10 @@
                     <i class="fas fa-id-card"></i> Student ID
                 </label>
                 <div class="input-wrapper">
-                    <input
-                        type="password"
+                    <input 
+                        type="password" 
                         id="password"
-                        name="password"
+                        name="password" 
                         placeholder="Enter your student ID"
                         required
                     >
@@ -585,15 +585,10 @@
         </div>
 
         <div class="login-footer">
-        <p>
-            Having trouble?
-           <a href="mailto:shahr.rahm@gmail.com">
-    <i class="fas fa-envelope"></i> Contact Support
-</a>
-
-        </p>
+            <p>Having trouble? <a href="mailto:shahr.rahm@gmail.com">
+                <i class="fas fa-envelope"></i> Contact Support
+            </a></p>
         </div>
-
     </div>
 
     <script>
@@ -604,35 +599,19 @@
             btn.innerHTML = '<span>Signing In...</span>';
         });
 
-        // Add smooth focus animations
+        // Add smooth focus animations (without scaling)
         const inputs = document.querySelectorAll('input');
         inputs.forEach(input => {
-            input.addEventListener('focus', function() {
-                this.parentElement.style.transform = 'scale(1.02)';
-            });
-
-            input.addEventListener('blur', function() {
-                this.parentElement.style.transform = 'scale(1)';
-            });
-
-            // Add ripple effect on click
+            // Remove the problematic scaling animation
+            // Just keep the CSS transitions for border and background changes
+            
+            // Add ripple effect on click (optional - can be removed if not needed)
             input.addEventListener('click', function(e) {
-                const ripple = document.createElement('div');
-                const rect = this.getBoundingClientRect();
-                const size = Math.max(rect.width, rect.height);
-                const x = e.clientX - rect.left - size / 2;
-                const y = e.clientY - rect.top - size / 2;
-
-                ripple.classList.add('ripple');
-                ripple.style.width = ripple.style.height = size + 'px';
-                ripple.style.left = x + 'px';
-                ripple.style.top = y + 'px';
-
-                this.parentElement.appendChild(ripple);
-
+                // Simple click feedback without expanding the form
+                this.style.transform = 'translateY(-1px)';
                 setTimeout(() => {
-                    ripple.remove();
-                }, 600);
+                    this.style.transform = 'translateY(0)';
+                }, 150);
             });
         });
 
