@@ -104,176 +104,170 @@ $attendees = $stmt->fetchAll();
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>Cloud Computing Attendance</title>
   <link rel="icon" href="images/favicon_io/favicon.ico" type="image/x-icon">
-  <link rel="stylesheet" href="style.css">
-  <script src="attendance.js" defer></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="index.css">
 </head>
 <body>
-<div class="header-container">
-  <div class="header-content">
-    <h1>CSE 4267: Cloud Computing</h1>
-    <p><?php echo date('l, F j, Y'); ?></p>
+  <!-- Animated Background Particles -->
+  <div class="bg-particles">
+    <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+    <div class="particle" style="left: 20%; animation-delay: 2s;"></div>
+    <div class="particle" style="left: 30%; animation-delay: 4s;"></div>
+    <div class="particle" style="left: 40%; animation-delay: 6s;"></div>
+    <div class="particle" style="left: 50%; animation-delay: 8s;"></div>
+    <div class="particle" style="left: 60%; animation-delay: 10s;"></div>
+    <div class="particle" style="left: 70%; animation-delay: 12s;"></div>
+    <div class="particle" style="left: 80%; animation-delay: 14s;"></div>
+    <div class="particle" style="left: 90%; animation-delay: 16s;"></div>
   </div>
-  
-  <div class="menu-container" style="position: absolute; right: 20px; top: 20px;">
-    <button class="menu-button">☰</button>
-    <div class="dropdown-menu">
-      <a href="/attendance/profile.php">My Profile</a>
-      <a href="/attendance/student-list.php">All Student List</a>
-      <a href="/attendance/student_attendance.php">Attendance Report</a>
-      <?php if (isset($_SESSION["user"]) && $_SESSION["user"] === "admin"): ?>
-        <a href="/attendance/mark_attendance.php">Manual Attendance</a>
-      <?php else: ?>
-        <a href="#" onclick="showAccessDenied(); return false;">Manual Attendance❗</a>
-      <?php endif; ?>
-      <?php if (isset($_SESSION["user"]) && $_SESSION["user"] === "admin"): ?>
-        <a href="/attendance/marks_entry.php">Enter Marks</a>
-      <?php else: ?>
-        <a href="#" onclick="showAccessDenied(); return false;">Enter Marks❗</a>
-      <?php endif; ?>
-      <?php if (isset($_SESSION["user"]) && $_SESSION["user"] === "admin"): ?>
-        <a href="/attendance/export_all_students_marks.php">All Students Marks</a>
-      <?php else: ?>
-        <a href="#" onclick="showAccessDenied(); return false;">All Students Marks❗</a>
-      <?php endif; ?>
-      <a href="/attendance/logout.php" style="color: red;">Logout</a>
+
+  <!-- Menu Overlay -->
+  <div class="menu-overlay" id="menuOverlay"></div>
+
+  <div class="header-container">
+    <div class="header-content">
+      <div>
+        <h1><i class="fas fa-cloud"></i> CSE 4267: Cloud Computing</h1>
+        <p><i class="fas fa-calendar"></i> <?php echo date('l, F j, Y'); ?></p>
+      </div>
+      <div class="menu-container" id="menuContainer">
+        <button class="menu-button" id="menuButton" aria-label="Menu" aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="dropdown-menu" id="dropdownMenu" role="menu">
+          <a href="/attendance/profile.php" role="menuitem"><i class="fas fa-user"></i> My Profile</a>
+          <a href="/attendance/student-list.php" role="menuitem"><i class="fas fa-users"></i> All Student List</a>
+          <a href="/attendance/student_attendance.php" role="menuitem"><i class="fas fa-chart-bar"></i> Attendance Report</a>
+          <?php if (isset($_SESSION["user"]) && $_SESSION["user"] === "admin"): ?>
+            <a href="/attendance/mark_attendance.php" role="menuitem"><i class="fas fa-edit"></i> Manual Attendance</a>
+          <?php else: ?>
+            <a href="#" onclick="showAccessDenied(); return false;" role="menuitem"><i class="fas fa-edit"></i> Manual Attendance<span style="color: #f87171;">❗</span></a>
+          <?php endif; ?>
+          <?php if (isset($_SESSION["user"]) && $_SESSION["user"] === "admin"): ?>
+            <a href="/attendance/marks_entry.php" role="menuitem"><i class="fas fa-pencil-alt"></i> Enter Marks</a>
+          <?php else: ?>
+            <a href="#" onclick="showAccessDenied(); return false;" role="menuitem"><i class="fas fa-pencil-alt"></i> Enter Marks<span style="color: #f87171;">❗</span></a>
+          <?php endif; ?>
+          <?php if (isset($_SESSION["user"]) && $_SESSION["user"] === "admin"): ?>
+            <a href="/attendance/export_all_students_marks.php" role="menuitem"><i class="fas fa-download"></i> All Students Marks</a>
+          <?php else: ?>
+            <a href="#" onclick="showAccessDenied(); return false;" role="menuitem"><i class="fas fa-download"></i> All Students Marks<span style="color: #f87171;">❗</span></a>
+          <?php endif; ?>
+          <a href="/attendance/logout.php" style="color: #f87171;" role="menuitem"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+      </div>
+      
     </div>
   </div>
-</div>
 
-  <!-- <div class="container">
-    <h2>Submit Attendance</h2>
+  <div class="container">
+    <!-- Attendance Submission Form (if needed) -->
     <?php if (!empty($message)): ?>
       <div class="message <?=$alertClass;?>">
         <?=$message;?>
       </div>
     <?php endif; ?>
-    <?php if ($formVisible): ?>
-      <form method="post" action="">
-        <div class="form-group">
-          <input type="text" id="student_id" name="student_id" value="<?= htmlspecialchars($_SESSION['student_id'] ?? ''); ?>" required readonly>
-        </div>
-        <button type="submit" name="submit_attendance" class="submit-btn">Submit Attendance</button>
-      </form>
-    <?php endif; ?>
-  </div> -->
 
-  <!-- Include the dashboard below the Submit Attendance section -->
-  <div style='margin-top:100px'>
-    <?php include 'dashboard.php'; ?>
+    <!-- <?php if ($formVisible && isset($_SESSION['student_id'])): ?>
+      <div class="card">
+        <h2><i class="fas fa-check-circle"></i> Submit Attendance</h2>
+        <form method="post" action="">
+          <div class="form-group">
+            <input type="text" id="student_id" name="student_id" value="<?= htmlspecialchars($_SESSION['student_id'] ?? ''); ?>" required readonly style="background: rgba(255, 255, 255, 0.05); color: #4ade80;">
+          </div>
+          <button type="submit" name="submit_attendance" class="btn">
+            <i class="fas fa-paper-plane"></i> Submit Attendance
+          </button>
+        </form>
+      </div>
+    <?php endif; ?> -->
+
+    <!-- Include the dashboard below the Submit Attendance section -->
+    <div style='margin-top: 40px'>
+      <?php 
+      if (file_exists('dashboard.php')) {
+          include 'dashboard.php'; 
+      }
+      ?>
+    </div>
   </div>
 
-  <div class="attendance-list">
-    <h2>Today's Attendance</h2>
+  <div class="attendance-list" >
+    <h2><i class="fas fa-list-check "></i> Today's Attendance</h2>
+    
     <form method="post" action="">
       <div class="search-container">
-        <input type="text" id="search_student_id" name="search_student_id" value="<?= htmlspecialchars($searchStudentId); ?>" placeholder="Search by Student ID">
-        <input type="date" id="search_date" name="search_date" value="<?= htmlspecialchars($searchDate); ?>" placeholder="Search by Date">
-        <button type="submit" name="search_attendance">Search</button>
+        <div class="form-group">
+          <input type="text" id="search_student_id" name="search_student_id" value="<?= htmlspecialchars($searchStudentId); ?>" placeholder="Search by Student ID">
+        </div>
+        <div class="form-group">
+          <input type="date" id="search_date" name="search_date" value="<?= htmlspecialchars($searchDate); ?>">
+        </div>
+        <button type="submit" name="search_attendance">
+          <i class="fas fa-search"></i> Search
+        </button>
       </div>
     </form>
-    <table class="attendance-table" id="attendance_table">
-      <thead>
-        <tr>
-          <th>Serial No</th>
-          <th>Student ID</th>
-          <th>Student Name</th>
-          <th>Date</th>
-        </tr>
-      </thead>
-      <tbody>
-        <?php if (empty($attendees)): ?>
+
+    <div class="table-container">
+      <table class="attendance-table" id="attendance_table">
+        <thead>
           <tr>
-            <td colspan="4">No attendance records found.</td>
+            <th><i class="fas fa-hashtag"></i> Serial No</th>
+            <th><i class="fas fa-id-card"></i> Student ID</th>
+            <th><i class="fas fa-user"></i> Student Name</th>
+            <th><i class="fas fa-calendar-day"></i> Date</th>
           </tr>
-        <?php else: ?>
-          <?php $count = $offset + 1; ?>
-          <?php foreach ($attendees as $attendee): ?>
+        </thead>
+        <tbody>
+          <?php if (empty($attendees)): ?>
             <tr>
-              <td><?= $count++; ?></td>
-              <td><?= htmlspecialchars($attendee['student_id']); ?></td>
-              <td><?= htmlspecialchars($attendee['name']); ?></td>
-              <td><?= htmlspecialchars($attendee['date']); ?></td>
+              <td colspan="4" style="text-align: center; color: #374151; padding: 40px;">
+                <i class="fas fa-info-circle" style="font-size: 2rem; margin-bottom: 10px; display: block;"></i>
+                No attendance records found.
+              </td>
             </tr>
-          <?php endforeach; ?>
-        <?php endif; ?>
-      </tbody>
-    </table>
+          <?php else: ?>
+            <?php $count = $offset + 1; ?>
+            <?php foreach ($attendees as $attendee): ?>
+              <tr>
+                <td><?= $count++; ?></td>
+                <td><?= htmlspecialchars($attendee['student_id']); ?></td>
+                <td><?= htmlspecialchars($attendee['name']); ?></td>
+                <td><?= htmlspecialchars($attendee['date']); ?></td>
+              </tr>
+            <?php endforeach; ?>
+          <?php endif; ?>
+        </tbody>
+      </table>
+
+      <!-- Mobile Cards Container (will be populated by JavaScript) -->
+      <div class="mobile-attendance-cards"></div>
+    </div>
+
+    <?php if ($totalPages > 1): ?>
     <div class="pagination">
-      <p class="page-number">Page <?= $page ?> of <?= $totalPages ?></p>
       <?php if ($page > 1): ?>
-        <a href="?page=<?= ($page - 1); ?>&search_date=<?= urlencode($searchDate); ?>&search_student_id=<?= urlencode($searchStudentId); ?>" class="pagination-link">Previous</a>
+        <a href="?page=<?= ($page - 1); ?>&search_date=<?= urlencode($searchDate); ?>&search_student_id=<?= urlencode($searchStudentId); ?>" class="pagination-link">
+          <i class="fas fa-chevron-left"></i> Previous
+        </a>
       <?php endif; ?>
+      
+      <p class="page-number">Page <?= $page ?> of <?= $totalPages ?></p>
+      
       <?php if ($page < $totalPages): ?>
-        <a href="?page=<?= ($page + 1); ?>&search_date=<?= urlencode($searchDate); ?>&search_student_id=<?= urlencode($searchStudentId); ?>" class="pagination-link">Next</a>
+        <a href="?page=<?= ($page + 1); ?>&search_date=<?= urlencode($searchDate); ?>&search_student_id=<?= urlencode($searchStudentId); ?>" class="pagination-link">
+          Next <i class="fas fa-chevron-right"></i>
+        </a>
       <?php endif; ?>
     </div>
-    <!-- <div class="button-container">
-      <a href="/attendance/student-list.php" class="button" style="margin-right: 10px;">All Student List</a>
-      <a href="/attendance/student_attendance.php" class="button" style="margin-right: 10px;">Attendance Report</a>
-      <?php if (isset($_SESSION["user"]) && $_SESSION["user"] === "admin"): ?>
-        <a href="/attendance/mark_attendance.php" class="button">Manual Attendance</a>
-      <?php else: ?>
-        <a href="#" class="button" onclick="showAccessDenied(); return false;">Manual Attendance</a>
-      <?php endif; ?>       
-    </div> -->
+    <?php endif; ?>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script>
-    function showAccessDenied() {
-      Swal.fire({
-        icon: 'error',
-        title: 'Access Denied',
-        text: 'Admins Only!!',
-        confirmButtonColor: '#d33',
-        confirmButtonText: 'OK'
-      });
-    }
-  </script>
-
-<style>
-  .menu-container {
-    position: relative;
-    display: inline-block;
-  }
-
-  .menu-button {
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-  }
-
-  .dropdown-menu {
-    display: none;
-    position: absolute;
-    right: 0;
-    background-color: white;
-    min-width: 200px;
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
-  }
-
-  .dropdown-menu a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-  }
-
-  .dropdown-menu a:hover {
-    background-color: #f1f1f1;
-  }
-
-  .menu-container:hover .dropdown-menu {
-    display: block;
-  }
-</style>
-
-
-
+  <script src="index.js"></script>
 </body>
 </html>
