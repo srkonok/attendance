@@ -356,25 +356,25 @@ $students = $studentsStmt->fetchAll();
           <i class="fas fa-bars"></i>
         </button>
         <div class="dropdown-menu" id="dropdownMenu" role="menu">
-          <a href="/attendance/index.php" role="menuitem"><i class="fas fa-home"></i> Home</a>
-          <a href="/attendance/profile.php" role="menuitem"><i class="fas fa-user"></i> My Profile</a>
-          <a href="/attendance/student_attendance.php" role="menuitem"><i class="fas fa-chart-bar"></i> Attendance Report</a>
+          <a href="index.php" role="menuitem"><i class="fas fa-home"></i> Home</a>
+          <a href="profile.php" role="menuitem"><i class="fas fa-user"></i> My Profile</a>
+          <a href="student_attendance.php" role="menuitem"><i class="fas fa-chart-bar"></i> Attendance Report</a>
           <?php if (isset($_SESSION["user"]) && $_SESSION["user"] === "admin"): ?>
-            <a href="/attendance/mark_attendance.php" role="menuitem"><i class="fas fa-edit"></i> Manual Attendance</a>
+            <a href="mark_attendance.php" role="menuitem"><i class="fas fa-edit"></i> Manual Attendance</a>
           <?php else: ?>
             <a href="#" onclick="showAccessDenied(); return false;" role="menuitem"><i class="fas fa-edit"></i> Manual Attendance<span style="color: #f87171;">❗</span></a>
           <?php endif; ?>
           <?php if (isset($_SESSION["user"]) && $_SESSION["user"] === "admin"): ?>
-            <a href="/attendance/marks_entry.php" role="menuitem"><i class="fas fa-pencil-alt"></i> Enter Marks</a>
+            <a href="marks_entry.php" role="menuitem"><i class="fas fa-pencil-alt"></i> Enter Marks</a>
           <?php else: ?>
             <a href="#" onclick="showAccessDenied(); return false;" role="menuitem"><i class="fas fa-pencil-alt"></i> Enter Marks<span style="color: #f87171;">❗</span></a>
           <?php endif; ?>
           <?php if (isset($_SESSION["user"]) && $_SESSION["user"] === "admin"): ?>
-            <a href="/attendance/export_all_students_marks.php" role="menuitem"><i class="fas fa-download"></i> All Students Marks</a>
+            <a href="export_all_students_marks.php" role="menuitem"><i class="fas fa-download"></i> All Students Marks</a>
           <?php else: ?>
             <a href="#" onclick="showAccessDenied(); return false;" role="menuitem"><i class="fas fa-download"></i> All Students Marks<span style="color: #f87171;">❗</span></a>
           <?php endif; ?>
-          <a href="/attendance/logout.php" style="color: #f87171;" role="menuitem"><i class="fas fa-sign-out-alt"></i> Logout</a>
+          <a href="logout.php" style="color: #f87171;" role="menuitem"><i class="fas fa-sign-out-alt"></i> Logout</a>
         </div>
       </div>
     </div>

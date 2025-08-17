@@ -184,10 +184,10 @@ $attendees = $stmt->fetchAll();
       <?php endif; ?>
     </div>
     <div class="button-container">
-      <a href="/attendance/student-list.php" class="button" style="margin-right: 10px;">All Student List</a>
-      <a href="/attendance/student_attendance.php" class="button" style="margin-right: 10px;">Attendance Report</a>
+      <a href="student-list.php" class="button" style="margin-right: 10px;">All Student List</a>
+      <a href="student_attendance.php" class="button" style="margin-right: 10px;">Attendance Report</a>
       <?php if (isset($_SESSION["user"]) && $_SESSION["user"] === "admin"): ?>
-        <a href="/attendance/mark_attendance.php" class="button">Manual Attendance</a>
+        <a href="mark_attendance.php" class="button">Manual Attendance</a>
       <?php else: ?>
         <a href="#" class="button" onclick="showAccessDenied(); return false;">Manual Attendance</a>
       <?php endif; ?>       
@@ -249,10 +249,10 @@ $attendees = $stmt->fetchAll();
 <div class="menu-container">
   <button class="menu-button">☰</button>
   <div class="dropdown-menu">
-    <a href="/attendance/student-list.php">All Student List</a>
-    <a href="/attendance/student_attendance.php">Attendance Report</a>
+    <a href="student-list.php">All Student List</a>
+    <a href="student_attendance.php">Attendance Report</a>
     <?php if (isset($_SESSION["user"]) && $_SESSION["user"] === "admin"): ?>
-      <a href="/attendance/mark_attendance.php">Manual Attendance</a>
+      <a href="mark_attendance.php">Manual Attendance</a>
     <?php else: ?>
       <a href="#" onclick="showAccessDenied(); return false;">Manual Attendance</a>
     <?php endif; ?>
