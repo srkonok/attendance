@@ -564,7 +564,7 @@ $marks = $marks_stmt->fetch(PDO::FETCH_ASSOC) ?: [];
                 <i class="fas fa-user-graduate"></i>
                 Student Profile
             </h1>
-            <p>Your comprehensive academic dashboard</p>
+            <!-- <p>Your comprehensive academic dashboard</p> -->
         </header>
 
         <div class="profile-grid">

@@ -522,11 +522,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <i class="fas fa-cloud"></i>
             </div>
             <h1 class="login-title">
-                <i class="fas fa-graduation-cap"></i>
+                <!-- <i class="fas fa-graduation-cap"></i> -->
                 Welcome Back
             </h1>
             <p class="login-subtitle">
-                <i class="fas fa-calendar"></i>
+                <!-- <i class="fas fa-calendar"></i> -->
                 CSE 4267: Cloud Computing
             </p>
         </div>

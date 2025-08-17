@@ -103,30 +103,44 @@ $todayAttendance = $attendanceStmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="particle"></div>
     </div>
 
-    <!-- Header -->
-    <div class="header-container">
-        <div class="header-content">
-            <div>
-                <h1><i class="fas fa-cloud"></i> Cloud Computing Attendance System</h1>
-                <p><i class="fas fa-user-check"></i> Mark Student Attendance</p>
-            </div>
-            <!-- Menu -->
-            <div class="menu-container" id="menuContainer">
-                <button class="menu-button" id="menuButton" aria-expanded="false" aria-haspopup="true">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <div class="menu-overlay" id="menuOverlay"></div>
-                <div class="dropdown-menu" id="dropdownMenu">
-                    <a href="index.php"><i class="fas fa-home"></i> Home</a>
-                    <a href="mark_attendance.php"><i class="fas fa-user-check"></i> Mark Attendance</a>
-                    <a href="view_attendance.php"><i class="fas fa-list"></i> View Attendance</a>
-                    <a href="manage_students.php"><i class="fas fa-users"></i> Manage Students</a>
-                    <a href="logout.php" style="color: red;"><i class="fas fa-sign-out-alt"></i> Logout</a>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Menu Overlay -->
+  <div class="menu-overlay" id="menuOverlay"></div>
 
+  <div class="header-container">
+    <div class="header-content">
+      <div>
+        <h1><i class="fas fa-cloud"></i> CSE 4267: Cloud Computing</h1>
+        <p><i class="fas fa-calendar"></i> <?php echo date('l, F j, Y'); ?></p>
+      </div>
+      <div class="menu-container" id="menuContainer">
+        <button class="menu-button" id="menuButton" aria-label="Menu" aria-haspopup="true" aria-expanded="false">
+          <i class="fas fa-bars"></i>
+        </button>
+        <div class="dropdown-menu" id="dropdownMenu" role="menu">
+          <a href="/attendance/profile.php" role="menuitem"><i class="fas fa-user"></i> My Profile</a>
+          <a href="/attendance/student-list.php" role="menuitem"><i class="fas fa-users"></i> All Student List</a>
+          <a href="/attendance/student_attendance.php" role="menuitem"><i class="fas fa-chart-bar"></i> Attendance Report</a>
+          <?php if (isset($_SESSION["user"]) && $_SESSION["user"] === "admin"): ?>
+            <a href="/attendance/mark_attendance.php" role="menuitem"><i class="fas fa-edit"></i> Manual Attendance</a>
+          <?php else: ?>
+            <a href="#" onclick="showAccessDenied(); return false;" role="menuitem"><i class="fas fa-edit"></i> Manual Attendance<span style="color: #f87171;">❗</span></a>
+          <?php endif; ?>
+          <?php if (isset($_SESSION["user"]) && $_SESSION["user"] === "admin"): ?>
+            <a href="/attendance/marks_entry.php" role="menuitem"><i class="fas fa-pencil-alt"></i> Enter Marks</a>
+          <?php else: ?>
+            <a href="#" onclick="showAccessDenied(); return false;" role="menuitem"><i class="fas fa-pencil-alt"></i> Enter Marks<span style="color: #f87171;">❗</span></a>
+          <?php endif; ?>
+          <?php if (isset($_SESSION["user"]) && $_SESSION["user"] === "admin"): ?>
+            <a href="/attendance/export_all_students_marks.php" role="menuitem"><i class="fas fa-download"></i> All Students Marks</a>
+          <?php else: ?>
+            <a href="#" onclick="showAccessDenied(); return false;" role="menuitem"><i class="fas fa-download"></i> All Students Marks<span style="color: #f87171;">❗</span></a>
+          <?php endif; ?>
+          <a href="/attendance/logout.php" style="color: #f87171;" role="menuitem"><i class="fas fa-sign-out-alt"></i> Logout</a>
+        </div>
+      </div>
+      
+    </div>
+  </div>
     <!-- Main Container -->
     <div class="container">
         <!-- Success/Error Messages -->
