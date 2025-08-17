@@ -1,53 +1,53 @@
 <?php
-session_start();
+    session_start();
 
-if (!isset($_SESSION["user"])) {
-    header("Location: login.php");
-    exit();
-}
+    if (! isset($_SESSION["user"])) {
+        header("Location: login.php");
+        exit();
+    }
 
-include 'db.php';
+    include 'db.php';
 
-// Pagination settings
-$limit = 15; // Number of students per page
-$page = isset($_GET['page']) && is_numeric($_GET['page']) ? (int)$_GET['page'] : 1;
-$offset = ($page - 1) * $limit;
+                  // Pagination settings
+    $limit  = 15; // Number of students per page
+    $page   = isset($_GET['page']) && is_numeric($_GET['page']) ? (int) $_GET['page'] : 1;
+    $offset = ($page - 1) * $limit;
 
-// Get the earliest attendance date
-$startDateQuery = "SELECT MIN(date) FROM attendance";
-$startDateStmt = $conn->prepare($startDateQuery);
-$startDateStmt->execute();
-$startDate = $startDateStmt->fetchColumn();
-$startDateFormatted = $startDate ? date("d M Y", strtotime($startDate)) : "Unknown";
+    // Get the earliest attendance date
+    $startDateQuery = "SELECT MIN(date) FROM attendance";
+    $startDateStmt  = $conn->prepare($startDateQuery);
+    $startDateStmt->execute();
+    $startDate          = $startDateStmt->fetchColumn();
+    $startDateFormatted = $startDate ? date("d M Y", strtotime($startDate)) : "Unknown";
 
-// Sorting settings
-$sortColumn = isset($_GET['sort']) && in_array($_GET['sort'], ['section']) ? $_GET['sort'] : 'student_id';
-$sortOrder = isset($_GET['order']) && in_array($_GET['order'], ['asc', 'desc']) ? $_GET['order'] : 'desc';
-$newSortOrder = ($sortOrder === 'asc') ? 'desc' : 'asc';
+    // Sorting settings
+    $sortColumn   = isset($_GET['sort']) && in_array($_GET['sort'], ['section']) ? $_GET['sort'] : 'student_id';
+    $sortOrder    = isset($_GET['order']) && in_array($_GET['order'], ['asc', 'desc']) ? $_GET['order'] : 'desc';
+    $newSortOrder = ($sortOrder === 'asc') ? 'desc' : 'asc';
 
-// Search settings
-$searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
+    // Search settings
+    $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
 
-// Fetch total students count with search applied
-$totalQuery = "SELECT COUNT(*) FROM students WHERE 
-    name LIKE :search OR 
-    student_id LIKE :search OR 
+    // Fetch total students count with search applied
+    $totalQuery = "SELECT COUNT(*) FROM students WHERE
+    name LIKE :search OR
+    student_id LIKE :search OR
     section LIKE :search";
-$totalStmt = $conn->prepare($totalQuery);
-$totalStmt->bindValue(':search', '%' . $searchQuery . '%', PDO::PARAM_STR);
-$totalStmt->execute();
-$totalStudents = $totalStmt->fetchColumn();
-$totalPages = ceil($totalStudents / $limit);
+    $totalStmt = $conn->prepare($totalQuery);
+    $totalStmt->bindValue(':search', '%' . $searchQuery . '%', PDO::PARAM_STR);
+    $totalStmt->execute();
+    $totalStudents = $totalStmt->fetchColumn();
+    $totalPages    = ceil($totalStudents / $limit);
 
-// Get total number of classes conducted
-$totalClassesQuery = "SELECT COUNT(DISTINCT date) FROM attendance";
-$totalClassesStmt = $conn->prepare($totalClassesQuery);
-$totalClassesStmt->execute();
-$totalClasses = (int) $totalClassesStmt->fetchColumn();
+    // Get total number of classes conducted
+    $totalClassesQuery = "SELECT COUNT(DISTINCT date) FROM attendance";
+    $totalClassesStmt  = $conn->prepare($totalClassesQuery);
+    $totalClassesStmt->execute();
+    $totalClasses = (int) $totalClassesStmt->fetchColumn();
 
-// Fetch students with attendance count
-$studentsQuery = "
-    SELECT s.*, 
+    // Fetch students with attendance count
+    $studentsQuery = "
+    SELECT s.*,
         COALESCE(a.attendance_count, 0) AS present_count
     FROM students s
     LEFT JOIN (
@@ -55,18 +55,18 @@ $studentsQuery = "
         FROM attendance
         GROUP BY student_id
     ) a ON s.student_id = a.student_id
-    WHERE s.name LIKE :search OR 
-          s.student_id LIKE :search OR 
+    WHERE s.name LIKE :search OR
+          s.student_id LIKE :search OR
           s.section LIKE :search
-    ORDER BY $sortColumn $sortOrder 
+    ORDER BY $sortColumn $sortOrder
     LIMIT :limit OFFSET :offset";
 
-$studentsStmt = $conn->prepare($studentsQuery);
-$studentsStmt->bindValue(':search', '%' . $searchQuery . '%', PDO::PARAM_STR);
-$studentsStmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-$studentsStmt->bindValue(':offset', $offset, PDO::PARAM_INT);
-$studentsStmt->execute();
-$students = $studentsStmt->fetchAll();
+    $studentsStmt = $conn->prepare($studentsQuery);
+    $studentsStmt->bindValue(':search', '%' . $searchQuery . '%', PDO::PARAM_STR);
+    $studentsStmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+    $studentsStmt->bindValue(':offset', $offset, PDO::PARAM_INT);
+    $studentsStmt->execute();
+    $students = $studentsStmt->fetchAll();
 ?>
 
 <!DOCTYPE html>
@@ -432,7 +432,7 @@ $students = $studentsStmt->fetchAll();
         <div class="header-content">
             <div>
                 <h1><i class="fas fa-chart-line"></i> Student Attendance Report</h1>
-                <p><i class="fas fa-calendar"></i> Attendance from <?= htmlspecialchars($startDateFormatted) ?></p>
+                <p><i class="fas fa-calendar"></i> Attendance from                                                                                                                                     <?php echo htmlspecialchars($startDateFormatted) ?></p>
             </div>
             <div class="menu-container" id="menuContainer">
                 <button class="menu-button" id="menuButton" aria-label="Menu" aria-haspopup="true" aria-expanded="false">
@@ -447,12 +447,12 @@ $students = $studentsStmt->fetchAll();
                     <?php else: ?>
                         <a href="#" onclick="showAccessDenied(); return false;" role="menuitem"><i class="fas fa-edit"></i> Manual Attendance<span style="color: #f87171;">❗</span></a>
                     <?php endif; ?>
-                    <?php if (isset($_SESSION["user"]) && $_SESSION["user"] === "admin"): ?>
+<?php if (isset($_SESSION["user"]) && $_SESSION["user"] === "admin"): ?>
                         <a href="marks_entry.php" role="menuitem"><i class="fas fa-pencil-alt"></i> Enter Marks</a>
                     <?php else: ?>
                         <a href="#" onclick="showAccessDenied(); return false;" role="menuitem"><i class="fas fa-pencil-alt"></i> Enter Marks<span style="color: #f87171;">❗</span></a>
                     <?php endif; ?>
-                    <?php if (isset($_SESSION["user"]) && $_SESSION["user"] === "admin"): ?>
+<?php if (isset($_SESSION["user"]) && $_SESSION["user"] === "admin"): ?>
                         <a href="export_all_students_marks.php" role="menuitem"><i class="fas fa-download"></i> All Students Marks</a>
                     <?php else: ?>
                         <a href="#" onclick="showAccessDenied(); return false;" role="menuitem"><i class="fas fa-download"></i> All Students Marks<span style="color: #f87171;">❗</span></a>
@@ -463,33 +463,44 @@ $students = $studentsStmt->fetchAll();
         </div>
     </div>
 
+    <div class="grid-btn-container" style="text-align: right;">
+        <a href="attendance_grid.php" class="grid-btn" title="Grid View">
+            <button type="submit">
+                <i class="fas fa-th"></i>
+                Grid View
+            </button>
+        </a>
+    </div>
+
+
+
     <div class="container">
-        <!-- Statistics Cards -->
+        <!-- Statistics Cards --> 
         <div class="stats-grid">
             <div class="stat-card">
                 <i class="fas fa-users stat-icon"></i>
-                <span class="stat-number"><?= $totalStudents ?></span>
+                <span class="stat-number"><?php echo $totalStudents ?></span>
                 <span class="stat-label">Total Students</span>
             </div>
             <div class="stat-card">
                 <i class="fas fa-calendar-check stat-icon"></i>
-                <span class="stat-number"><?= $totalClasses ?></span>
+                <span class="stat-number"><?php echo $totalClasses ?></span>
                 <span class="stat-label">Classes Conducted</span>
             </div>
             <div class="stat-card">
                 <i class="fas fa-percentage stat-icon"></i>
                 <span class="stat-number">
-                    <?php 
-                    $avgAttendance = 0;
-                    if (!empty($students) && $totalClasses > 0) {
-                        $totalPercentage = 0;
-                        foreach ($students as $student) {
-                            $presentCount = (int) $student['present_count'];
-                            $attendancePercentage = ($presentCount / $totalClasses) * 100;
-                            $totalPercentage += $attendancePercentage;
+                    <?php
+                        $avgAttendance = 0;
+                        if (! empty($students) && $totalClasses > 0) {
+                            $totalPercentage = 0;
+                            foreach ($students as $student) {
+                                $presentCount         = (int) $student['present_count'];
+                                $attendancePercentage = ($presentCount / $totalClasses) * 100;
+                                $totalPercentage += $attendancePercentage;
+                            }
+                            $avgAttendance = round($totalPercentage / count($students), 1);
                         }
-                        $avgAttendance = round($totalPercentage / count($students), 1);
-                    }
                     echo $avgAttendance;
                     ?>%
                 </span>
@@ -497,14 +508,15 @@ $students = $studentsStmt->fetchAll();
             </div>
         </div>
 
+
         <div class="card">
             <!-- Search Bar -->
             <div class="search-form">
                 <form method="GET" action="">
-                    <input 
-                        type="text" 
-                        name="search" 
-                        value="<?= htmlspecialchars($searchQuery) ?>" 
+                    <input
+                        type="text"
+                        name="search"
+                        value="<?php echo htmlspecialchars($searchQuery) ?>"
                         placeholder="🔍 Search by name, student ID, or section..."
                     >
                     <button type="submit">
@@ -521,10 +533,10 @@ $students = $studentsStmt->fetchAll();
                             <th><i class="fas fa-hashtag"></i> Serial No</th>
                             <th><i class="fas fa-id-card"></i> Student ID</th>
                             <th>
-                                <a href="?sort=section&order=<?= $newSortOrder ?>&search=<?= htmlspecialchars($searchQuery) ?>&page=<?= $page ?>" class="sortable">
+                                <a href="?sort=section&order=<?php echo $newSortOrder ?>&search=<?php echo htmlspecialchars($searchQuery) ?>&page=<?php echo $page ?>" class="sortable">
                                     <span class="section-title"><i class="fas fa-layer-group"></i> Section</span>
                                     <span class="arrow">
-                                        <?= ($sortColumn === 'section' ? ($sortOrder === 'asc' ? '▲' : '▼') : '↕') ?>
+                                        <?php echo($sortColumn === 'section' ? ($sortOrder === 'asc' ? '▲' : '▼') : '↕') ?>
                                     </span>
                                 </a>
                             </th>
@@ -542,26 +554,31 @@ $students = $studentsStmt->fetchAll();
                                 </td>
                             </tr>
                         <?php else: ?>
-                            <?php $count = $offset + 1; ?>
-                            <?php foreach ($students as $student): ?>
-                                <?php
-                                $presentCount = (int) $student['present_count'];
-                                $attendancePercentage = ($totalClasses > 0) ? round(($presentCount / $totalClasses) * 100, 1) : 0;
-                                $percentageClass = '';
-                                if ($attendancePercentage >= 80) $percentageClass = 'style="color: #10b981; font-weight: 600;"';
-                                elseif ($attendancePercentage >= 60) $percentageClass = 'style="color: #f59e0b; font-weight: 600;"';
-                                else $percentageClass = 'style="color: #ef4444; font-weight: 600;"';
-                                ?>
+<?php $count = $offset + 1; ?>
+<?php foreach ($students as $student): ?>
+<?php
+    $presentCount         = (int) $student['present_count'];
+    $attendancePercentage = ($totalClasses > 0) ? round(($presentCount / $totalClasses) * 100, 1) : 0;
+    $percentageClass      = '';
+    if ($attendancePercentage >= 80) {
+        $percentageClass = 'style="color: #10b981; font-weight: 600;"';
+    } elseif ($attendancePercentage >= 60) {
+        $percentageClass = 'style="color: #f59e0b; font-weight: 600;"';
+    } else {
+        $percentageClass = 'style="color: #ef4444; font-weight: 600;"';
+    }
+
+?>
                                 <tr>
-                                    <td><?= $count++ ?></td>
-                                    <td><strong><?= htmlspecialchars($student['student_id'] ?? '') ?></strong></td>
-                                    <td><?= htmlspecialchars($student['section'] ?? '') ?></td>
-                                    <td><?= htmlspecialchars($student['name'] ?? '') ?></td>
-                                    <td><strong><?= $presentCount ?></strong>/<?= $totalClasses ?></td>
-                                    <td <?= $percentageClass ?>><?= $attendancePercentage ?>%</td>
+                                    <td><?php echo $count++ ?></td>
+                                    <td><strong><?php echo htmlspecialchars($student['student_id'] ?? '') ?></strong></td>
+                                    <td><?php echo htmlspecialchars($student['section'] ?? '') ?></td>
+                                    <td><?php echo htmlspecialchars($student['name'] ?? '') ?></td>
+                                    <td><strong><?php echo $presentCount ?></strong>/<?php echo $totalClasses ?></td>
+                                    <td                                                                               <?php echo $percentageClass ?>><?php echo $attendancePercentage ?>%</td>
                                 </tr>
                             <?php endforeach; ?>
-                        <?php endif; ?>
+<?php endif; ?>
                     </tbody>
                 </table>
 
@@ -573,44 +590,49 @@ $students = $studentsStmt->fetchAll();
                             <p>No students found matching your search.</p>
                         </div>
                     <?php else: ?>
-                        <?php $count = $offset + 1; ?>
-                        <?php foreach ($students as $student): ?>
-                            <?php
-                            $presentCount = (int) $student['present_count'];
-                            $attendancePercentage = ($totalClasses > 0) ? round(($presentCount / $totalClasses) * 100, 1) : 0;
-                            $percentageColor = '';
-                            if ($attendancePercentage >= 80) $percentageColor = '#10b981';
-                            elseif ($attendancePercentage >= 60) $percentageColor = '#f59e0b';
-                            else $percentageColor = '#ef4444';
-                            ?>
+<?php $count = $offset + 1; ?>
+<?php foreach ($students as $student): ?>
+<?php
+    $presentCount         = (int) $student['present_count'];
+    $attendancePercentage = ($totalClasses > 0) ? round(($presentCount / $totalClasses) * 100, 1) : 0;
+    $percentageColor      = '';
+    if ($attendancePercentage >= 80) {
+        $percentageColor = '#10b981';
+    } elseif ($attendancePercentage >= 60) {
+        $percentageColor = '#f59e0b';
+    } else {
+        $percentageColor = '#ef4444';
+    }
+
+?>
                             <div class="student-card">
                                 <div class="student-card-row">
                                     <span class="student-card-label"><i class="fas fa-hashtag"></i> Serial No</span>
-                                    <span class="student-card-value"><?= $count++ ?></span>
+                                    <span class="student-card-value"><?php echo $count++ ?></span>
                                 </div>
                                 <div class="student-card-row">
                                     <span class="student-card-label"><i class="fas fa-id-card"></i> Student ID</span>
-                                    <span class="student-card-value"><strong><?= htmlspecialchars($student['student_id'] ?? '') ?></strong></span>
+                                    <span class="student-card-value"><strong><?php echo htmlspecialchars($student['student_id'] ?? '') ?></strong></span>
                                 </div>
                                 <div class="student-card-row">
                                     <span class="student-card-label"><i class="fas fa-layer-group"></i> Section</span>
-                                    <span class="student-card-value"><?= htmlspecialchars($student['section'] ?? '') ?></span>
+                                    <span class="student-card-value"><?php echo htmlspecialchars($student['section'] ?? '') ?></span>
                                 </div>
                                 <div class="student-card-row">
                                     <span class="student-card-label"><i class="fas fa-user"></i> Name</span>
-                                    <span class="student-card-value"><?= htmlspecialchars($student['name'] ?? '') ?></span>
+                                    <span class="student-card-value"><?php echo htmlspecialchars($student['name'] ?? '') ?></span>
                                 </div>
                                 <div class="student-card-row">
                                     <span class="student-card-label"><i class="fas fa-check-circle"></i> Present Days</span>
-                                    <span class="student-card-value"><strong><?= $presentCount ?></strong>/<?= $totalClasses ?></span>
+                                    <span class="student-card-value"><strong><?php echo $presentCount ?></strong>/<?php echo $totalClasses ?></span>
                                 </div>
                                 <div class="student-card-row">
                                     <span class="student-card-label"><i class="fas fa-chart-pie"></i> Attendance</span>
-                                    <span class="student-card-value" style="color: <?= $percentageColor ?>; font-weight: 600;"><?= $attendancePercentage ?>%</span>
+                                    <span class="student-card-value" style="color:                                                                                                                                                                     <?php echo $percentageColor ?>; font-weight: 600;"><?php echo $attendancePercentage ?>%</span>
                                 </div>
                             </div>
                         <?php endforeach; ?>
-                    <?php endif; ?>
+<?php endif; ?>
                 </div>
             </div>
 
@@ -618,15 +640,15 @@ $students = $studentsStmt->fetchAll();
             <?php if ($totalPages > 1): ?>
             <div class="pagination">
                 <?php if ($page > 1): ?>
-                    <a href="?page=<?= ($page - 1) ?>&sort=<?= $sortColumn ?>&order=<?= $sortOrder ?>&search=<?= urlencode($searchQuery) ?>" class="pagination-link">
+                    <a href="?page=<?php echo($page - 1) ?>&sort=<?php echo $sortColumn ?>&order=<?php echo $sortOrder ?>&search=<?php echo urlencode($searchQuery) ?>" class="pagination-link">
                         <i class="fas fa-chevron-left"></i> Previous
                     </a>
                 <?php endif; ?>
-                
-                <p class="page-number">Page <?= $page ?> of <?= $totalPages ?></p>
-                
+
+                <p class="page-number">Page                                                                                       <?php echo $page ?> of<?php echo $totalPages ?></p>
+
                 <?php if ($page < $totalPages): ?>
-                    <a href="?page=<?= ($page + 1) ?>&sort=<?= $sortColumn ?>&order=<?= $sortOrder ?>&search=<?= urlencode($searchQuery) ?>" class="pagination-link">
+                    <a href="?page=<?php echo($page + 1) ?>&sort=<?php echo $sortColumn ?>&order=<?php echo $sortOrder ?>&search=<?php echo urlencode($searchQuery) ?>" class="pagination-link">
                         Next <i class="fas fa-chevron-right"></i>
                     </a>
                 <?php endif; ?>
@@ -653,7 +675,7 @@ $students = $studentsStmt->fetchAll();
     <script>
         document.getElementById("export-btn").addEventListener("click", function() {
             var format = document.getElementById("export-format").value;
-            var searchQuery = "<?= urlencode($searchQuery) ?>";
+            var searchQuery = "<?php echo urlencode($searchQuery) ?>";
             window.location.href = "export.php?format=" + format + "&search=" + searchQuery;
         });
 
