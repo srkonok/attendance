@@ -7,7 +7,7 @@ services:
       - "${PHP_PORT}:80"
     volumes:
       - .:/var/www/html
-      - /Users/shahriar/Sites/attendance/.env:/var/www/html/.env:ro
+      - /Users/shahriar/Sites.env:/var/www/html/.env:ro
     depends_on:
       - db
 
