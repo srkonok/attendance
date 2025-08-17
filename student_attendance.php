@@ -439,7 +439,7 @@ $students = $studentsStmt->fetchAll();
                     <i class="fas fa-bars"></i>
                 </button>
                 <div class="dropdown-menu" id="dropdownMenu" role="menu">
-                    <a href="" role="menuitem"><i class="fas fa-home"></i> Dashboard</a>
+                    <a href="index.php" role="menuitem"><i class="fas fa-home"></i> Home</a>
                     <a href="profile.php" role="menuitem"><i class="fas fa-user"></i> My Profile</a>
                     <a href="student-list.php" role="menuitem"><i class="fas fa-users"></i> All Student List</a>
                     <?php if (isset($_SESSION["user"]) && $_SESSION["user"] === "admin"): ?>
