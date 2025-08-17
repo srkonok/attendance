@@ -195,8 +195,8 @@ $attendees = $stmt->fetchAll();
     </div>
   </div>
 
-  <div class="attendance-list">
-    <h2><i class="fas fa-list-check"></i> Today's Attendance</h2>
+  <div class="attendance-list" >
+    <h2><i class="fas fa-list-check "></i> Today's Attendance</h2>
     
     <form method="post" action="">
       <div class="search-container">

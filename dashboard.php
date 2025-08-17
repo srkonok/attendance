@@ -83,7 +83,7 @@ body {
     text-align: center;
     font-size: 1.3rem;
     font-weight: 700;
-    color: #059669;
+    color: #f8fafc;
     margin-bottom: 15px;
     padding: 0 10px;
     display: flex;
@@ -480,7 +480,7 @@ body {
 
 <div class="dashboard-wrapper">
     <h2 class="dashboard-title">
-        <i class="fas fa-chart-line"></i>
+        <i class="fas fa-chart-line " style="color:#ffff;"></i>
         Attendance Dashboard
     </h2>
 
