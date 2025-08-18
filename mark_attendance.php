@@ -145,7 +145,7 @@ $todayAttendance = $attendanceStmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="container">
         <!-- Success/Error Messages -->
         <?php if ($successMessage): ?>
-            <div class="message success">
+            <div class="message success" >
                 <i class="fas fa-check-circle"></i>
                 <?= htmlspecialchars($successMessage) ?>
             </div>
