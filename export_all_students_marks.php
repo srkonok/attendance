@@ -30,7 +30,7 @@ try {
 
 $students = [];
 try {
-    $query = "SELECT s.*,
+    $baseQuery = "SELECT s.*,
         COALESCE(a.attendance_count, 0) AS present_count,
         COALESCE(m.class_test_1, 0) AS class_test_1,
         COALESCE(m.class_test_2, 0) AS class_test_2,
@@ -47,16 +47,20 @@ try {
     WHERE s.name LIKE :search OR s.student_id LIKE :search OR s.section LIKE :search
     ORDER BY student_id ASC";
 
-    if ($limit !== null) {
-        $query .= " LIMIT :limit OFFSET :offset";
-    }
-
-    $stmt = $conn->prepare($query);
-    $stmt->bindValue(':search', '%' . $searchQuery . '%');
-    if ($limit !== null) {
+    if ($exportAll) {
+        // For export, don't apply LIMIT and OFFSET
+        $query = $baseQuery;
+        $stmt = $conn->prepare($query);
+        $stmt->bindValue(':search', '%' . $searchQuery . '%');
+    } else {
+        // For normal view, apply LIMIT and OFFSET
+        $query = $baseQuery . " LIMIT :limit OFFSET :offset";
+        $stmt = $conn->prepare($query);
+        $stmt->bindValue(':search', '%' . $searchQuery . '%');
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->bindValue(':offset', $offset, PDO::PARAM_INT);
     }
+    
     $stmt->execute();
     $students = $stmt->fetchAll();
 } catch (PDOException $e) {
@@ -169,7 +173,7 @@ $totalPages = $limit ? ceil($totalStudents / $limit) : 1;
             </table>
         </div>
 
-        <!-- Pagination -->
+        <!-- Pagination (only show when not exporting) -->
         <?php if (! $exportAll && $totalPages > 1): ?>
             <div class="pagination">
                 <?php if ($page > 1): ?>
@@ -183,6 +187,10 @@ $totalPages = $limit ? ceil($totalStudents / $limit) : 1;
                 <?php endif; ?>
             </div>
         <?php endif; ?>
+
+        <?php if ($exportAll): ?>
+            <p><strong>Showing all <?= count($students) ?> students for export</strong></p>
+        <?php endif; ?>
     </div>
 </div>
 
@@ -190,29 +198,80 @@ $totalPages = $limit ? ceil($totalStudents / $limit) : 1;
 function handleExport(type) {
     const url = new URL(window.location.href);
     url.searchParams.set('export', 'true');
+    
+    // Preserve search query when exporting
+    const searchQuery = new URLSearchParams(window.location.search).get('search');
+    if (searchQuery) {
+        url.searchParams.set('search', searchQuery);
+    }
+    
     if (type === 'pdf') {
         url.searchParams.set('exportType', 'pdf');
         window.location.href = url.toString();
     } else if (type === 'csv') {
-        exportToCSV();
+        // First navigate to get all data, then export
+        window.location.href = url.toString() + '&exportType=csv';
     } else if (type === 'excel') {
-        exportToExcel();
+        // First navigate to get all data, then export
+        window.location.href = url.toString() + '&exportType=excel';
     }
 }
 
 window.addEventListener('load', () => {
     const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('exportType') === 'pdf') {
+    const exportType = urlParams.get('exportType');
+    
+    if (exportType === 'pdf') {
         exportToPDF();
-        history.replaceState({}, '', window.location.pathname);
+        // Clean up URL after export
+        const cleanUrl = new URL(window.location.href);
+        cleanUrl.searchParams.delete('export');
+        cleanUrl.searchParams.delete('exportType');
+        history.replaceState({}, '', cleanUrl.toString());
+    } else if (exportType === 'csv') {
+        exportToCSV();
+        // Clean up URL after export
+        const cleanUrl = new URL(window.location.href);
+        cleanUrl.searchParams.delete('export');
+        cleanUrl.searchParams.delete('exportType');
+        history.replaceState({}, '', cleanUrl.toString());
+    } else if (exportType === 'excel') {
+        exportToExcel();
+        // Clean up URL after export
+        const cleanUrl = new URL(window.location.href);
+        cleanUrl.searchParams.delete('export');
+        cleanUrl.searchParams.delete('exportType');
+        history.replaceState({}, '', cleanUrl.toString());
     }
 });
 
 function exportToPDF() {
     const { jsPDF } = window.jspdf;
     const doc = new jsPDF('landscape');
-    doc.autoTable({ html: '#exportTable', theme: 'grid', headStyles: { fillColor: [41, 128, 185], textColor: 255 }, styles: { fontSize: 9 }, margin: { top: 20 } });
-    doc.save('student-report.pdf');
+    doc.autoTable({ 
+        html: '#exportTable', 
+        theme: 'grid', 
+        headStyles: { fillColor: [41, 128, 185], textColor: 255 }, 
+        styles: { fontSize: 8 }, 
+        margin: { top: 20 },
+        tableWidth: 'auto',
+        columnStyles: {
+            0: {cellWidth: 15},  // #
+            1: {cellWidth: 25},  // ID
+            2: {cellWidth: 40},  // Name
+            3: {cellWidth: 20},  // Section
+            4: {cellWidth: 25},  // Attendance %
+            5: {cellWidth: 20},  // Quiz 1
+            6: {cellWidth: 20},  // Quiz 2
+            7: {cellWidth: 20},  // Quiz 3
+            8: {cellWidth: 20},  // Assign 1
+            9: {cellWidth: 20},  // Assign 2
+            10: {cellWidth: 25}, // Attendance(10)
+            11: {cellWidth: 20}, // Quiz(20)
+            12: {cellWidth: 20}  // Total (30)
+        }
+    });
+    doc.save('all-students-report.pdf');
 }
 
 function exportToCSV() {
@@ -226,13 +285,13 @@ function exportToCSV() {
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = 'student-report.csv';
+    link.download = 'all-students-report.csv';
     link.click();
 }
 
 function exportToExcel() {
     const wb = XLSX.utils.table_to_book(document.getElementById('exportTable'));
-    XLSX.writeFile(wb, 'student-report.xlsx');
+    XLSX.writeFile(wb, 'all-students-report.xlsx');
 }
 </script>
 </body>
